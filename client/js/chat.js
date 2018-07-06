@@ -1,0 +1,23 @@
+function inputChat(){
+	if (socket){
+		socket.emit('inputChat', {id: socketId, message: String(document.getElementById('chatInput').value)})
+		document.getElementById('chatInput').value = '';
+		document.getElementById('chatLog').scrollTop = document.getElementById('chatLog').scrollHeight;
+
+	}
+}
+
+window.onkeyup = function(e) {
+	var key = e.keyCode ? e.keyCode : e.which;	
+	if (key == 13) {
+		inputChat();
+	}
+}
+
+socket.on('updateChat', function(data){
+	var chat = ''
+	for (var i = 0; i < data.chatlog.length; i++){
+		chat = chat + data.chatlog[i] + '\n';
+	}
+	document.getElementById('chat').innerHTML = chat;
+})

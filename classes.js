@@ -1,0 +1,181 @@
+//shuffle array
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+
+exports.Player = function(id, name, order){
+	var self = {
+		id: id,
+		name: name,
+		order: order,
+		score: 0,
+		cards: [],
+		templates: [],
+		chosenCard: 0,
+		chosenTemplate: 0,
+		turn: false,
+		vote: null,
+		inGame: false,
+	}
+	self.getCards = function(sockets){
+		//draw 5 cards
+		for (var i = 0; i < 5; i++){
+			if (self.cards[i] == undefined){
+				self.cards.push(Math.floor(Math.random()*10));
+			}
+		}
+		for (var i = 0; i < 3; i++){
+			if (self.templates[i] == undefined){
+				self.templates.push(Math.floor(Math.random()*10));
+			}
+		}
+		sockets[self.id].emit('updateCards', {cards: self.cards, templates: self.templates})
+	}
+	return self;
+}
+
+exports.Room = function(id){
+	var self= {
+		id: id,
+		players: {},
+		chatlog: [],
+		gameStart: false,
+		playerTurn: 0,
+		round: 0,
+		turnTimer: '',
+		turnIndex: 0,
+		gamePhase: 'none', //phases: DRAW, PLAY, VOTE, RESULTS, WINNER
+		gameMessage: 'Waiting for players...',
+		memes: [],
+		timers: [20, 110, 100, 60, 20]
+	}
+	self.orderPlayers = function(k){
+		for (var i in self.players){
+			if (self.players[i].order > k){
+				self.players[i].order -= 1;
+			}
+		}
+	}
+	self.gameManager = function(sockets){
+		//check if there are at least 3 person in the game
+		if (Object.keys(self.players).length >= 3 && self.gameStart == false){
+			self.gameStart = true;
+			self.round = 0;
+			self.turnTimer = 30;
+			self.gamePhase = 'DRAW';
+			self.gameMessage = 'Discard one card';
+			self.chatlog.push("[GAME START]");
+			//turn for order 0 player
+			for (var i in self.players){
+				self.players[i].inGame = true;
+				self.players[i].getCards(sockets) //give cards to everyone in the room
+			}
+		}
+	}
+	self.draw = function(sockets){
+		//if player has chosen a card
+		for (var i in self.players){
+			//change card for anyone who wants to
+			if (self.players[i].chosenCard){
+				self.players[i].cards.splice(self.players[i].chosenCard, 1, Math.floor(Math.random()*10))
+			}
+			sockets[self.players[i].id].emit('updateCards', {cards: self.players[i].cards, templates: self.players[i].templates}) //send cards to everyone
+		}
+	}
+	self.play = function(sockets){
+		//get everyone's selection
+		self.memes = [];
+		for (var i in self.players){
+			self.memes.push({name: self.players[i].name, image: self.players[i].cards[self.players[i].chosenCard], template: self.players[i].templates[self.players[i].chosenTemplate], id: self.players[i].id, order: self.memes.length, votes: 0})
+			self.players[i].cards.splice(self.players[i].chosenCard, 1, Math.floor(Math.random()*10))
+			self.players[i].templates.splice(self.players[i].chosenTemplate, 1, Math.floor(Math.random()*10))
+			if (self.players[i].inGame == true){
+				sockets[self.players[i].id].emit('updateCards', {cards: self.players[i].cards, templates: self.players[i].templates}) //send cards to everyone
+			}
+		}
+		//shuffle array
+		self.memes = shuffle(self.memes);
+		//send everyone the images to vote
+		for (var i in self.players){
+			if (self.players[i].inGame == true){
+				sockets[self.players[i].id].emit('everyoneVote', self.memes);
+			}
+		}
+	}
+	self.vote = function(sockets){
+		//raise score for everyone
+		for (var i = 0; i < self.memes.length; i++){
+			for (var j in self.players){
+				if (self.players[j].vote == self.memes[i].order){
+					self.memes[i].votes += 1;
+					self.players[self.memes[i].id].score += 1;
+				}
+			}
+		}
+		for (var i in self.players){
+			if (self.players[i].inGame == true){
+				sockets[self.players[i].id].emit('results', self.memes);
+				sockets[self.players[i].id].emit('updateScores', self.players);
+			}
+			if (self.players[i].inGame == false){
+				self.players[i].getCards(sockets);
+			}
+		}
+	}
+	self.results = function(sockets){
+
+	}
+	self.update = function(sockets){
+		//update chat
+		for (var i in self.players){
+			sockets[self.players[i].id].emit('updateTurnTimer', {turnTimer: self.turnTimer, message: self.gameMessage}) //send turn timer
+			sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog}); //
+		}
+		if (self.gameStart){
+			self.turnTimer -= 1;
+			if (self.turnTimer <= 0){
+				switch(self.gamePhase){
+					case 'DRAW':
+						self.draw(sockets);
+						self.turnTimer = self.timers[1];
+						self.gamePhase = 'PLAY';
+						self.gameMessage = 'Everyone make a meme!';
+						break;
+					case 'PLAY':
+						self.play(sockets);
+						self.turnTimer = self.timers[2];
+						self.gamePhase = 'VOTE';
+						self.gameMessage = 'Everyone vote!';
+						break;
+					case 'VOTE':
+						self.vote(sockets);
+						self.turnTimer = self.timers[3];
+						self.gamePhase = 'RESULTS';
+						self.gameMessage = 'The results are in here.';
+						break;
+					case 'RESULTS':
+						self.results(sockets);
+						self.turnTimer = self.timers[4];
+						self.gamePhase = 'DRAW';
+						self.gameMessage = 'Discard an image.';
+				}
+			}
+		}
+	}
+	return self;
+}

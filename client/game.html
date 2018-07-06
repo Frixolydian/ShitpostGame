@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+	<meta charset=utf-8>
+	<head>
+		<title>Joining game</title>
+	</head>
+
+	<style>
+	* {
+	    box-sizing: border-box;
+	}
+	html, body {
+		margin: 0px;
+		height: 100%;
+		padding: 0px;
+	}
+	/*CREATE LEFT COLUMN WITH PLAYERS*/
+	.upperHead{
+		margin: 0px;
+		height:82%;
+	}
+	.chat{
+		width: 100%;
+		height:18%;
+	}
+	.chatLog{
+		overflow-y: auto;
+		height:89px;
+	}
+	.chatInput{
+		position:absolute;
+		bottom:0;
+		width:100%;
+	}
+	.playerColumn {
+	    float: left;
+	    width: 15%;
+	    padding: 0px;
+	    height: 100%;
+	}
+	.gamePlay{
+		float:left;
+		width: 85%;
+		margin: 0px;
+		height: 100%;
+	}
+	.message{
+		padding: 1px 0 0 0;
+		background-color:orange;
+		height:10%;
+		width:100%;
+	}
+	.cards{
+		background-color:red;
+		float:left;
+		margin: 0px;
+		width: 100%;
+		height: 35%;
+	}
+	.cardContainer{
+		float:left;
+		margin: 1% 1% 1% 1%;
+		width: 18%;
+		background-color:white;
+		height: 85%;
+	}
+	.cardContainer img{
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	.templates{
+		background-color:purple;
+		float:left;
+		margin: 0px;
+		width: 100%;
+		height: 55%;
+	}
+	.templateContainer{
+		float:left;
+		margin: 1% 1% 1% 1%;
+		width: 31.2%;
+		background-color:white;
+		height: 92%;
+	}
+	.templateContainer img{
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	.memes{
+		width: 100%;
+		height:90%;
+		background-color:red;
+		float:left;
+		margin:0px;
+		overflow: scroll;
+	}
+	.memeContainer{
+		width:25%;
+		margin-left: 5%;
+		float:left;
+		padding: 2px;
+	}
+	.memeContainer canvas{
+		width: 90%;
+		height: auto;
+		float:left;
+	}
+
+	</style>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+	<script src="lib/jquery-3.3.1.min.js"></script>
+	<script src="js/connect.js"></script>
+	<script src="js/chat.js"></script>
+	<script src="js/game.js"></script>
+	<script src="js/image.js"></script>
+
+	<body>
+		<section class="upperHead">
+			<div style="background-color:lightblue" class='playerColumn'>
+				<pre hidden id="player0"><hr></pre>
+				<pre hidden id="player1"><hr></pre>
+				<pre hidden id="player2"><hr></pre>
+				<pre hidden id="player3"><hr></pre>
+				<pre hidden id="player4"><hr></pre>
+				<pre hidden id="player5"><hr></pre>
+				<pre hidden id="player6"><hr></pre>
+				<pre hidden id="player7"><hr></pre>
+				<pre hidden id="player8"><hr></pre>
+				<pre hidden id="player9"><hr></pre>
+			</div>
+			<div style="background-color:yellow" class="gamePlay">
+				<div class="message">
+					<h1 id="turnTimer"></h1>
+				</div>
+
+				<div class="cards" id="cards">
+					<div class="cardContainer">
+						<img id="playerCard0" onclick='inputCard(0)'>
+					</div>
+					<div class="cardContainer">
+						<img id="playerCard1" onclick='inputCard(1)'>
+					</div>
+					<div class="cardContainer">
+						<img id="playerCard2" onclick='inputCard(2)'>
+					</div>
+					<div class="cardContainer">
+						<img id="playerCard3" onclick='inputCard(3)'>
+					</div>
+					<div class="cardContainer">
+						<img id="playerCard4" onclick='inputCard(4)'>
+					</div>
+				</div>
+
+				<div class="templates" id="templates">
+					<div class="templateContainer">
+						<img id="playerTemplate0" onclick='inputTemplate(0)'>
+					</div>
+					<div class="templateContainer">
+						<img id="playerTemplate1" onclick='inputTemplate(1)'>
+					</div>
+					<div class="templateContainer">
+						<img id="playerTemplate2" onclick='inputTemplate(2)'>
+					</div>
+				</div>
+
+				<div hidden id="memes" class="memes">
+					<div class="memeContainer" id="memeContainer0">
+						<pre id="memetext0"></pre></br>
+						<canvas id="meme0" onclick='inputVote(document.getElementById("meme0").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer1">
+						<pre id="memetext1"></pre></br>
+						<canvas id="meme1" onclick='inputVote(document.getElementById("meme1").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer2">
+						<pre id="memetext2"></pre></br>
+						<canvas id="meme2" onclick='inputVote(document.getElementById("meme2").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer3">
+						<pre id="memetext3"></pre></br>
+						<canvas id="meme3" onclick='inputVote(document.getElementById("meme3").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer4">
+						<pre id="memetext4"></pre></br>
+						<canvas id="meme4" onclick='inputVote(document.getElementById("meme4").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer5">
+						<pre id="memetext5"></pre></br>
+						<canvas id="meme5" onclick='inputVote(document.getElementById("meme5").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer6">
+						<pre id="memetext6"></pre></br>
+						<canvas id="meme6" onclick='inputVote(document.getElementById("meme6").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer7">
+						<pre id="memetext7"></pre></br>
+						<canvas id="meme7" onclick='inputVote(document.getElementById("meme7").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer8">
+						<pre id="memetext8"></pre></br>
+						<canvas id="meme8" onclick='inputVote(document.getElementById("meme8").value)'></canvas>
+					</div>
+					<div class="memeContainer" id="memeContainer9">
+						<pre id="memetext9"></pre></br>
+						<canvas id="meme9" onclick='inputVote(document.getElementById("meme9").value)'></canvas>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="chat">
+			<div class="chatLog" id="chatLog">
+				<pre id="chat"></pre>
+			</div>
+			<div class="chatInput">
+				<input style="width:90%" id='chatInput' type='text' message='message'/>
+				<button style="width:9%" onclick='inputChat()'> Chat </button>
+			</div>
+		</section>
+	</body>
+
+</html>

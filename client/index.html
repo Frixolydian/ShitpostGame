@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<meta charset=utf-8>
+	<head>
+	<title>ShitPostGame</title>
+    <style> body { margin: 0; background: #222; } </style>
+	</head>
+
+<h1 style="text-align: center;"> Input name and room if your magical wish is to join a room ▽・ᴥ・▽
+
+</br>
+<img src="https://media.giphy.com/media/Rg2dCgs7bUYVO/giphy.gif" alt="Mountain View">
+
+</br>
+
+</h1>
+
+<script>
+	function checkNewRoom(obj){
+		document.getElementById("room").hidden = obj.checked ? true : false;
+	}
+
+</script>
+
+
+<h1 style="text-align: center;">
+	<form action="/game.html" method="GET">
+		    Nickname <input type="text" name="username" enctype="text/plain"/></br>
+			<input type="checkbox" name="newRoom" value="Yes" onclick="checkNewRoom(this)"> Create new room</br>
+		    <p id="room" style="margin-top:-0px">Room <input type="text" name="room" maxlength="4"/></p>
+		    <input type="submit" value="Enter"/>
+	</form>
+</h1>
+
+</body>
+
+
+</html>

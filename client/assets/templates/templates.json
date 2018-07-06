@@ -1,0 +1,72 @@
+templatesJSON = {
+	"template0": {
+		"x1":0,
+		"y1":0,
+		"width":960,
+		"height":540,
+		"overlay":true
+	},
+	"template1": {
+		"x1":29,
+		"y1":266,
+		"width":578,
+		"height":396,
+		"overlay":false
+	},
+	"template2": {
+		"x1":18,
+		"y1":106,
+		"width":567,
+		"height":296,
+		"overlay":false
+	},
+	"template3": {
+		"x1":37,
+		"y1":22,
+		"width":145,
+		"height":145,
+		"overlay":false
+	},
+	"template4": {
+		"x1":218,
+		"y1":2,
+		"width":92,
+		"height":93,
+		"overlay":false
+	},
+	"template5": {
+		"x1":388,
+		"y1":831,
+		"width":269,
+		"height":258,
+		"overlay":false
+	},
+	"template6": {
+		"x1":0,
+		"y1":0,
+		"width":250,
+		"height":234,
+		"overlay":false
+	},
+	"template7": {
+		"x1":231,
+		"y1":223,
+		"width":196,
+		"height":167,
+		"overlay":false
+	},
+	"template8": {
+		"x1":14,
+		"y1":221,
+		"width":619,
+		"height":279,
+		"overlay":false
+	},
+	"template9": {
+		"x1":26,
+		"y1":438,
+		"width":326,
+		"height":327,
+		"overlay":false
+	},
+}
