@@ -21,6 +21,8 @@ var makeMeme = function(template, image, canv){
 	var imageLoad = function(){
 		document.getElementById(canv).width = memeTemplate.width;
 		document.getElementById(canv).height = memeTemplate.height;
+		context.fillStyle = "black";
+		context.fillRect(0, 0, canvas.width, canvas.height);
 		if(!data.overlay){
 			context.drawImage(memeTemplate, 0, 0, memeTemplate.width, memeTemplate.height);
 		}

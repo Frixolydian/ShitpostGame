@@ -17,7 +17,7 @@ socket.on('emitSocketId', function(data){
 	console.log(data);
 //check username and room
 	var username = getQueryVariable('username');
-	var room = getQueryVariable('room');
+	var room = getQueryVariable('room').toUpperCase();
 
 	//CREATE A NEW ROOM OR CONNECT TO AN EXISTING ONE
 	if(getQueryVariable('newRoom') === 'Yes'){

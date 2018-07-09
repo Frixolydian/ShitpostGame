@@ -94,7 +94,6 @@ io.sockets.on('connection', function(socket){
 		else{
 			socket.emit('noRoom');
 		}
-
 	})
 
 //receive players' input

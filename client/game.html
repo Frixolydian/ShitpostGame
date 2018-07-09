@@ -17,30 +17,41 @@
 	/*CREATE LEFT COLUMN WITH PLAYERS*/
 	.upperHead{
 		margin: 0px;
-		height:82%;
+		height:100%;
+	}
+
+	.leftColumn{
+		width:20%;
+		float:left;
+		height: 100%;
+	}
+
+	.playerDisplay {
+	    float: left;
+	    width: 100%;
+	    height:50%;
+	    padding: 0px;
 	}
 	.chat{
 		width: 100%;
-		height:18%;
+		height:50%;
+		  word-wrap: break-word;
+		  overflow-wrap: break-word;
 	}
 	.chatLog{
 		overflow-y: auto;
 		height:89px;
+		width:100%;
 	}
 	.chatInput{
 		position:absolute;
-		bottom:0;
 		width:100%;
+		bottom:2%;
 	}
-	.playerColumn {
-	    float: left;
-	    width: 15%;
-	    padding: 0px;
-	    height: 100%;
-	}
+
 	.gamePlay{
 		float:left;
-		width: 85%;
+		width: 80%;
 		margin: 0px;
 		height: 100%;
 	}
@@ -53,59 +64,75 @@
 	.cards{
 		background-color:red;
 		float:left;
-		margin: 0px;
+		margin:0px;
+		padding:5px;
 		width: 100%;
 		height: 35%;
 	}
 	.cardContainer{
 		float:left;
-		margin: 1% 1% 1% 1%;
+		margin: 1.6% 0.5% 0.5% 0.5%;
 		width: 18%;
 		background-color:white;
-		height: 85%;
+		transition: transform .2s; /* Animation */
+		height: 80%;
 	}
 	.cardContainer img{
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
 	}
+	.cardContainer:hover {
+		transform: scale(1.5) translateY(0%);
+	}
 	.templates{
-		background-color:purple;
+		background-color:green;
 		float:left;
 		margin: 0px;
 		width: 100%;
 		height: 55%;
+		padding:5px;
 	}
 	.templateContainer{
 		float:left;
 		margin: 1% 1% 1% 1%;
-		width: 31.2%;
+		width: 29%;
 		background-color:white;
-		height: 92%;
+		height: 80%;
+		transition: transform .2s; /* Animation */
+	    display: inline-block;
 	}
 	.templateContainer img{
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
 	}
+	.templateContainer:hover {
+		transform: scale(1.4) translateY(-10%);
+	}
 	.memes{
 		width: 100%;
 		height:90%;
 		background-color:red;
 		float:left;
-		margin:0px;
-		overflow: scroll;
 	}
 	.memeContainer{
-		width:25%;
-		margin-left: 5%;
+		width:32%;
+		height:auto;
+		margin-left:3%;
+		margin: auto;
 		float:left;
-		padding: 2px;
 	}
 	.memeContainer canvas{
-		width: 90%;
+		width: 100%;
 		height: auto;
 		float:left;
+	    transition: transform .2s; /* Animation */
+	    object-fit:scale-down;
+	}
+
+	.memeContainer canvas:hover {
+		transform: scale(1.4) translateY(-10%);
 	}
 
 	</style>
@@ -119,24 +146,47 @@
 
 	<body>
 		<section class="upperHead">
-			<div style="background-color:lightblue" class='playerColumn'>
-				<pre hidden id="player0"><hr></pre>
-				<pre hidden id="player1"><hr></pre>
-				<pre hidden id="player2"><hr></pre>
-				<pre hidden id="player3"><hr></pre>
-				<pre hidden id="player4"><hr></pre>
-				<pre hidden id="player5"><hr></pre>
-				<pre hidden id="player6"><hr></pre>
-				<pre hidden id="player7"><hr></pre>
-				<pre hidden id="player8"><hr></pre>
-				<pre hidden id="player9"><hr></pre>
+
+			<div class='leftColumn'>
+
+				<div style="background-color:lightblue" class='playerDisplay'>
+					<pre hidden id="player0"><hr></pre>
+					<pre hidden id="player1"><hr></pre>
+					<pre hidden id="player2"><hr></pre>
+					<pre hidden id="player3"><hr></pre>
+					<pre hidden id="player4"><hr></pre>
+					<pre hidden id="player5"><hr></pre>
+					<pre hidden id="player6"><hr></pre>
+					<pre hidden id="player7"><hr></pre>
+					<pre hidden id="player8"><hr></pre>
+					<pre hidden id="player9"><hr></pre>
+				</div>
+
+				<div class="chat">
+					[CHAT]
+					<div class="chatLog" id="chatLog">
+						<pre id="chat"></pre>
+					</div>
+					<div class="chatInput">
+						<input id='chatInput' type='text' message='message'/>
+
+					</div>
+				</div>
+
 			</div>
+
+
+
+
+
+
 			<div style="background-color:yellow" class="gamePlay">
 				<div class="message">
 					<h1 id="turnTimer"></h1>
 				</div>
 
 				<div class="cards" id="cards">
+					Images <br>
 					<div class="cardContainer">
 						<img id="playerCard0" onclick='inputCard(0)'>
 					</div>
@@ -155,6 +205,7 @@
 				</div>
 
 				<div class="templates" id="templates">
+					Templates <br>
 					<div class="templateContainer">
 						<img id="playerTemplate0" onclick='inputTemplate(0)'>
 					</div>
@@ -210,15 +261,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="chat">
-			<div class="chatLog" id="chatLog">
-				<pre id="chat"></pre>
-			</div>
-			<div class="chatInput">
-				<input style="width:90%" id='chatInput' type='text' message='message'/>
-				<button style="width:9%" onclick='inputChat()'> Chat </button>
-			</div>
-		</section>
+
 	</body>
 
 </html>

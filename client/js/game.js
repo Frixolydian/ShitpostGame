@@ -24,6 +24,7 @@ socket.on('everyoneVote', function(data){
 	document.getElementById('memes').hidden = false;
 	for (var i = 0; i < 10; i++){
 		document.getElementById('memeContainer' + i).hidden = true;
+		document.getElementById('memetext' + i).innerHTML = '';
 	}
 	for (var i = 0; i < data.length; i++){
 		if (data[i].id !== socketId){
