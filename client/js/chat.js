@@ -17,7 +17,7 @@ window.onkeyup = function(e) {
 socket.on('updateChat', function(data){
 	var chat = ''
 	for (var i = 0; i < data.chatlog.length; i++){
-		chat = chat + data.chatlog[i] + '\n';
+		chat = chat + data.chatlog[i] + '<br>';
 	}
 	document.getElementById('chat').innerHTML = chat;
 })

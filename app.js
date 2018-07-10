@@ -102,12 +102,10 @@ io.sockets.on('connection', function(socket){
 		ROOM_LIST[searchRoom(data.id)].chatlog.push(player.name + ': ' + data.message)
 		//update everyone chat
 	})
-
 	socket.on('inputCard', function(data){
 		var player = searchId(data.id);
 		ROOM_LIST[searchRoom(data.id)].players[data.id].chosenCard = data.card;
 	})
-
 	socket.on('inputTemplate', function(data){
 		var player = searchId(data.id);
 		ROOM_LIST[searchRoom(data.id)].players[data.id].chosenTemplate = data.template;
@@ -115,6 +113,10 @@ io.sockets.on('connection', function(socket){
 	socket.on('inputVote', function(data){
 		var player = searchId(data.id);
 		ROOM_LIST[searchRoom(data.id)].players[data.id].vote = data.vote;
+	})
+	socket.on('reRoll', function(data){
+		var player = searchId(data.id);
+		ROOM_LIST[searchRoom(data.id)].players[data.id].reRoll(SOCKET_LIST);
 	})
 
 

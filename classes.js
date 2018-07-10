@@ -34,6 +34,7 @@ exports.Player = function(id, name, order){
 		turn: false,
 		vote: null,
 		inGame: false,
+		rerolls: 3,
 	}
 	self.getCards = function(sockets){
 		//draw 5 cards
@@ -47,7 +48,15 @@ exports.Player = function(id, name, order){
 				self.templates.push(Math.floor(Math.random()*templateN));
 			}
 		}
-		sockets[self.id].emit('updateCards', {cards: self.cards, templates: self.templates})
+		sockets[self.id].emit('updateCards', {cards: self.cards, templates: self.templates, rerolls: self.rerolls})
+	}
+	self.reRoll = function(sockets){
+		if(self.rerolls > 0){
+			self.rerolls -= 1;
+			self.cards = [];
+			self.templates = [];
+			self.getCards(sockets);
+		}
 	}
 	return self;
 }
@@ -97,7 +106,7 @@ exports.Room = function(id){
 			if (self.players[i].chosenCard){
 //				self.players[i].cards.splice(self.players[i].chosenCard, 1, Math.floor(Math.random()*imageN))
 			}
-			sockets[self.players[i].id].emit('updateCards', {cards: self.players[i].cards, templates: self.players[i].templates}) //send cards to everyone
+			sockets[self.players[i].id].emit('updateCards', {cards: self.players[i].cards, templates: self.players[i].templates, rerolls: self.players[i].rerolls}) //send cards to everyone
 		}
 	}
 	self.play = function(sockets){
@@ -108,7 +117,7 @@ exports.Room = function(id){
 			self.players[i].cards.splice(self.players[i].chosenCard, 1, Math.floor(Math.random()*imageN))
 			self.players[i].templates.splice(self.players[i].chosenTemplate, 1, Math.floor(Math.random()*templateN))
 			if (self.players[i].inGame == true){
-				sockets[self.players[i].id].emit('updateCards', {cards: self.players[i].cards, templates: self.players[i].templates}) //send cards to everyone
+				sockets[self.players[i].id].emit('updateCards', {cards: self.players[i].cards, templates: self.players[i].templates, rerolls: self.players[i].rerolls}) //send cards to everyone
 			}
 		}
 		//shuffle array

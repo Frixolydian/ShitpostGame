@@ -7,6 +7,7 @@ socket.on('updateTurnTimer', function(data){
 })
 
 socket.on('updateCards', function(data){
+	console.log(data)
 	document.getElementById('cards').hidden = false;
 	document.getElementById('templates').hidden = false;
 	document.getElementById('memes').hidden = true;
@@ -16,6 +17,7 @@ socket.on('updateCards', function(data){
 	for (var i = 0; i < 3; i++){
 		document.getElementById('playerTemplate' + i).src = "../assets/templates/template" + data.templates[i] + ".png"
 	}
+	document.getElementById('reroll').value = 'Re-roll (' + data.rerolls + ')';
 })
 
 socket.on('everyoneVote', function(data){
@@ -70,4 +72,8 @@ function inputTemplate(template){
 		document.getElementById('playerTemplate' + i).border = 0;
 	}
 	document.getElementById('playerTemplate' + template).border = 5;
+}
+
+function reRoll(){
+	socket.emit('reRoll', {id: socketId});
 }
