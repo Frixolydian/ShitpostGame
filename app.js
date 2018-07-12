@@ -82,6 +82,10 @@ io.sockets.on('connection', function(socket){
 		if(ROOM_LIST[data.room] !== undefined){
 			var player = m.Player(data.id, data.username, Object.keys(ROOM_LIST[data.room].players).length)
 			ROOM_LIST[data.room].players[data.id] = player;
+			if (ROOM_LIST[data.room].gameStart == true){
+				ROOM_LIST[data.room].players[data.id].inGame = true; //put in game if the game has started
+				ROOM_LIST[data.room].players[data.id].getCards(SOCKET_LIST)
+			}
 			socket.emit('getRoom', {players: ROOM_LIST[data.room].players, room: data.room})
 			//update all other players
 			for (var i in ROOM_LIST[data.room].players){
