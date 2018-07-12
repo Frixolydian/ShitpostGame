@@ -102,7 +102,7 @@ exports.Room = function(id){
 				self.players[i].getCards(sockets) //give cards to everyone in the room
 			}
 		}
-		else{
+		else if(Object.keys(self.players).length < 3){
 			self.gameStart = false;
 			self.turnTimer = 0;
 			self.gameMessage = 'Waiting for players...';
