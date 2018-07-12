@@ -20,7 +20,6 @@ function shuffle(array) {
 var imageN = 511;
 var templateN = 116;
 
-
 exports.Player = function(id, name, order){
 	var self = {
 		id: id,
@@ -49,6 +48,7 @@ exports.Player = function(id, name, order){
 			}
 		}
 		sockets[self.id].emit('updateCards', {cards: self.cards, templates: self.templates, rerolls: self.rerolls})
+		sockets[self.id].emit('updateScores', self.players);
 	}
 	self.reRoll = function(sockets){
 		if(self.rerolls > 0){
@@ -74,7 +74,8 @@ exports.Room = function(id){
 		gamePhase: 'none', //phases: DRAW, PLAY, VOTE, RESULTS, WINNER
 		gameMessage: 'Waiting for players...',
 		memes: [],
-		timers: [20, 130, 120, 60, 0]
+		timers: [20, 130, 120, 60, 0],
+		maxScore: 10,
 	}
 	self.orderPlayers = function(k){
 		for (var i in self.players){
@@ -94,9 +95,42 @@ exports.Room = function(id){
 			self.chatlog.push("[GAME START]");
 			//turn for order 0 player
 			for (var i in self.players){
+				self.players[i].cards = [];
+				self.players[i].templates = [];
+				self.players[i].rerolls = 3;
 				self.players[i].inGame = true;
 				self.players[i].getCards(sockets) //give cards to everyone in the room
 			}
+		}
+		else{
+			self.gameStart = false;
+			self.turnTimer = 0;
+			self.gameMessage = 'Waiting for players...';
+		}
+	}
+	self.winner = function(sockets){
+		for (var i in self.players){
+			if (self.players[i].score >= self.maxScore){
+				self.gameMessage = self.players[i].name + ' won!';
+				self.gamePhase = 'WINNER';
+				self.turnTimer = 30;
+			}
+		}
+	}
+	self.newGame = function(sockets){
+		self.gameStart = true;
+		self.turnTimer = 0;
+		self.gamePhase = 'DRAW';
+		self.gameMessage = 'Players drawing images';
+		self.chatlog.push("[GAME START]");
+		//turn for order 0 player
+		for (var i in self.players){
+			self.players[i].score = 0;
+			self.players[i].cards = [];
+			self.players[i].templates = [];
+			self.players[i].rerolls = 3;
+			self.players[i].inGame = true;
+			self.players[i].getCards(sockets) //give cards to everyone in the room
 		}
 	}
 	self.draw = function(sockets){
@@ -149,14 +183,12 @@ exports.Room = function(id){
 			}
 		}
 	}
-	self.results = function(sockets){
 
-	}
 	self.update = function(sockets){
 		//update chat
 		for (var i in self.players){
 			sockets[self.players[i].id].emit('updateTurnTimer', {turnTimer: self.turnTimer, message: self.gameMessage}) //send turn timer
-			sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog}); //
+			sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog});
 		}
 		if (self.gameStart){
 			self.turnTimer -= 1;
@@ -181,10 +213,13 @@ exports.Room = function(id){
 						self.gameMessage = 'The results are...';
 						break;
 					case 'RESULTS':
-						self.results(sockets);
 						self.turnTimer = self.timers[4];
 						self.gamePhase = 'DRAW';
 						self.gameMessage = 'Discard an image.';
+						self.winner(sockets);
+						break;
+					case 'WINNER':
+						self.newGame(sockets);
 				}
 			}
 		}

@@ -140,6 +140,8 @@ io.sockets.on('connection', function(socket){
 					for (var j in ROOM_LIST[i].players){
 						SOCKET_LIST[ROOM_LIST[i].players[j].id].emit('playerLeft', {player: player, room: ROOM_LIST[i].players});
 					}
+//stop game if only two remain
+					ROOM_LIST[i].gameManager(SOCKET_LIST);
 //delete if empty
 					if(Object.keys(ROOM_LIST[i].players) == 0){
 						console.log('deleting empty room ' + i)
