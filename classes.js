@@ -61,9 +61,10 @@ exports.Player = function(id, name, order){
 	return self;
 }
 
-exports.Room = function(id){
+exports.Room = function(id, private){
 	var self= {
 		id: id,
+		private: private,
 		players: {},
 		chatlog: [],
 		gameStart: false,
@@ -102,10 +103,13 @@ exports.Room = function(id){
 				self.players[i].getCards(sockets) //give cards to everyone in the room
 			}
 		}
-		else if(Object.keys(self.players).length < 3){
+		else if(Object.keys(self.players).length < 3 && self.gameStart == true){
 			self.gameStart = false;
 			self.turnTimer = 0;
 			self.gameMessage = 'Waiting for players...';
+			for (var i in self.players){
+				sockets[self.players[i].id].emit('disconnectEndGame', 0)
+			}
 		}
 	}
 	self.winner = function(sockets){
@@ -130,6 +134,8 @@ exports.Room = function(id){
 			self.players[i].templates = [];
 			self.players[i].rerolls = 3;
 			self.players[i].inGame = true;
+		}
+		for (var i in self.players){
 			self.players[i].getCards(sockets) //give cards to everyone in the room
 		}
 	}
@@ -198,13 +204,13 @@ exports.Room = function(id){
 						self.draw(sockets);
 						self.turnTimer = self.timers[1];
 						self.gamePhase = 'PLAY';
-						self.gameMessage = 'Everyone make a meme!';
+						self.gameMessage = 'Make a meme! Pair an image and a template.';
 						break;
 					case 'PLAY':
 						self.play(sockets);
 						self.turnTimer = self.timers[2];
 						self.gamePhase = 'VOTE';
-						self.gameMessage = 'Everyone vote!';
+						self.gameMessage = 'Vote for your favorite meme!';
 						break;
 					case 'VOTE':
 						self.vote(sockets);

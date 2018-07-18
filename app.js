@@ -66,14 +66,20 @@ io.sockets.on('connection', function(socket){
 	SOCKET_LIST[socket.id] = socket;
 
 	socket.emit('emitSocketId', socket_id);
+	socket.emit('roomList', ROOM_LIST);
+
+	socket.on('updateRooms', function(){
+		socket.emit('roomList', ROOM_LIST);
+	})
+
 
 	socket.on('newRoom', function(data){
 		var code = createCode();
 		var player = m.Player(data.id, data.username, 0);
-		var room = m.Room(code);
-		room.players[data.id] = player
+		var room = m.Room(code, data.private);
+		room.players[data.id] = player;
 		ROOM_LIST[code] = room;
-		socket.emit('getRoom', {players: ROOM_LIST[code].players, room: room.id})
+		socket.emit('getRoom', {players: ROOM_LIST[code].players, room: room.id, private: data.private})
 //notify chat
 		ROOM_LIST[code].chatlog.push('-' + player.name + ' connected-')
 	})
@@ -86,7 +92,7 @@ io.sockets.on('connection', function(socket){
 				ROOM_LIST[data.room].players[data.id].inGame = true; //put in game if the game has started
 				ROOM_LIST[data.room].players[data.id].getCards(SOCKET_LIST)
 			}
-			socket.emit('getRoom', {players: ROOM_LIST[data.room].players, room: data.room})
+			socket.emit('getRoom', {players: ROOM_LIST[data.room].players, room: data.room, private: ROOM_LIST[data.room].private})
 			//update all other players
 			for (var i in ROOM_LIST[data.room].players){
 				SOCKET_LIST[ROOM_LIST[data.room].players[i].id].emit('newPlayer', ROOM_LIST[data.room].players);
@@ -119,22 +125,21 @@ io.sockets.on('connection', function(socket){
 		ROOM_LIST[searchRoom(data.id)].players[data.id].vote = data.vote;
 	})
 	socket.on('reRoll', function(data){
-		var player = searchId(data.id);
-		ROOM_LIST[searchRoom(data.id)].players[data.id].reRoll(SOCKET_LIST);
+		if(searchRoom(data.id)){
+			var player = searchId(data.id);
+			if(ROOM_LIST[searchRoom(data.id)].gameStart == true){
+				ROOM_LIST[searchRoom(data.id)].players[data.id].reRoll(SOCKET_LIST);
+			}
+		}
 	})
 
-
-	socket.on('disconnect', function(){
-//remove from player list
-		delete SOCKET_LIST[socket.id];
-		players_connected =- 1;
-//remove player from room
+	socket.on('exitRoom', function(){
+		//remove player from room
 		for (var i in ROOM_LIST){
 			for (var j in ROOM_LIST[i].players){
 				if (socket.id == j){
 //order remaining players
 					ROOM_LIST[i].orderPlayers(ROOM_LIST[i].players[socket.id].order);
-					console.log('player disconnected from ' + i)
 //save first then delete player
 					var player = ROOM_LIST[i].players[socket.id]
 					delete ROOM_LIST[i].players[socket.id];
@@ -148,13 +153,44 @@ io.sockets.on('connection', function(socket){
 					ROOM_LIST[i].gameManager(SOCKET_LIST);
 //delete if empty
 					if(Object.keys(ROOM_LIST[i].players) == 0){
-						console.log('deleting empty room ' + i)
 						delete ROOM_LIST[i];
 					}
 				}
 			}
 		}
-		console.log('disconnected ' + socket_id)
+	})
+
+
+
+
+	socket.on('disconnect', function(){
+//remove from player list
+		delete SOCKET_LIST[socket.id];
+		players_connected =- 1;
+//remove player from room
+		for (var i in ROOM_LIST){
+			for (var j in ROOM_LIST[i].players){
+				if (socket.id == j){
+//order remaining players
+					ROOM_LIST[i].orderPlayers(ROOM_LIST[i].players[socket.id].order);
+//save first then delete player
+					var player = ROOM_LIST[i].players[socket.id]
+					delete ROOM_LIST[i].players[socket.id];
+//notify chat
+					ROOM_LIST[i].chatlog.push('-' + player.name + ' disconnected-')
+//send removed player to all remaining
+					for (var j in ROOM_LIST[i].players){
+						SOCKET_LIST[ROOM_LIST[i].players[j].id].emit('playerLeft', {player: player, room: ROOM_LIST[i].players});
+					}
+//stop game if only two remain
+					ROOM_LIST[i].gameManager(SOCKET_LIST);
+//delete if empty
+					if(Object.keys(ROOM_LIST[i].players) == 0){
+						delete ROOM_LIST[i];
+					}
+				}
+			}
+		}
 	})
 });
 

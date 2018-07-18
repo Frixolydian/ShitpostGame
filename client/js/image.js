@@ -45,3 +45,10 @@ var makeMeme = function(template, image, canv){
 		imageLoad();
 	};
 }
+
+
+var bigImg = function(id){
+	var canvas = document.getElementById('meme' + id);
+	var dataURL = canvas.toDataURL();
+	document.getElementById('memeDisplayCanvas').src = dataURL;
+}

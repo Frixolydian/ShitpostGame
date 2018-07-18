@@ -1,6 +1,6 @@
 function inputChat(){
 	if (socket){
-		socket.emit('inputChat', {id: socketId, message: String(document.getElementById('chatInput').value)})
+		socket.emit('inputChat', {id: sessionStorage.getItem('socketId'), message: String(document.getElementById('chatInput').value)})
 		document.getElementById('chatInput').value = '';
 		document.getElementById('chatLog').scrollTop = document.getElementById('chatLog').scrollHeight;
 

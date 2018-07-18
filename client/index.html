@@ -15,22 +15,26 @@
 
 </h1>
 
-<script>
-	function checkNewRoom(obj){
-		document.getElementById("room").hidden = obj.checked ? true : false;
-	}
-
-</script>
-
 
 <h1 style="text-align: center;">
-	<form action="/game.html" method="GET">
-		    Nickname <input type="text" name="username" enctype="text/plain" maxlength="14"/></br>
-			<input type="checkbox" name="newRoom" value="Yes" onclick="checkNewRoom(this)"> Create new room</br>
-		    <p id="room" style="margin-top:-0px">Room <input type="text" name="room" maxlength="4" style="text-transform:uppercase"/></p>
-		    <input type="submit" value="Enter"/>
+	<form action="/game.html">
+	    Nickname <input id="usernameInput" type="text" enctype="text/plain" maxlength="12"/></br>
+	    <input type="submit" onclick="enterGame()" value="Enter"/>
 	</form>
 </h1>
+
+
+<script>
+	sessionStorage.setItem('room', '');
+	sessionStorage.setItem('username', '');
+	sessionStorage.setItem('private', false);
+	sessionStorage.setItem('newRoom', false);
+
+	function enterGame(){
+		sessionStorage.setItem('username', document.getElementById("usernameInput").value);
+	}
+</script>
+
 
 </body>
 

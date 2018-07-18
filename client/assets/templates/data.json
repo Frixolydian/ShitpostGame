@@ -291,7 +291,7 @@
 		"y1":0,
 		"width":415,
 		"height":400,
-		"overlay":false
+		"overlay":true
 	},
 	"template42": {
 		"x1":29,
@@ -435,9 +435,9 @@
 	},
 	"template61": {
 		"x1":198,
-		"y1":165,
+		"y1":194,
 		"width":202,
-		"height":205,
+		"height":206,
 		"overlay":false
 	},
 	"template62": {

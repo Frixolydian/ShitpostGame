@@ -2,276 +2,194 @@
 <html>
 	<meta charset=utf-8>
 	<head>
-		<title>Joining game</title>
+		<title>ShitPostGame</title>
+
+	<link rel="stylesheet" type="text/css" href="css/game.css">
+	<link rel="stylesheet" type="text/css" href="css/lobby.css">
+
 	</head>
-
-	<style>
-	* {
-	    box-sizing: border-box;
-	}
-	html, body {
-		margin: 0px;
-		height: 100%;
-		padding: 0px;
-	}
-	/*CREATE LEFT COLUMN WITH PLAYERS*/
-	.upperHead{
-		margin: 0px;
-		height:100%;
-	}
-
-	.leftColumn{
-		width:20%;
-		float:left;
-		height: 100%;
-	}
-
-	.playerDisplay {
-	    float: left;
-	    width: 100%;
-	    height:50%;
-	    padding: 0px;
-	}
-	.chat{
-		width: 98%;
-		height:100%;
-    	text-align: justify;
-    	text-justify: inter-word;
-		word-wrap: break-word;
-	}
-	.chatLog{
-		padding-left: 2.5%;
-		overflow-y: auto;
-		overflow-x: visible;
-		height:39%;
-		width:100%;
-	}
-	.chatInput{
-		position:absolute;
-		width:100%;
-		bottom:2%;
-	}
-
-	.gamePlay{
-		float:left;
-		width: 80%;
-		margin: 0px;
-		height: 100%;
-	}
-	.topFrame{
-		padding: 1px 0 0 0;
-		background-color:orange;
-		height:10%;
-		width:100%;
-	}
-	.message{
-		float:left;
-		width:70%;
-	}
-	.reroll{
-		padding-top:2%;
-		float:right;
-		width:20%;
-	}
-	.cards{
-		background-color:red;
-		float:left;
-		margin:0px;
-		padding:5px;
-		width: 100%;
-		height: 35%;
-	}
-	.cardContainer{
-		float:left;
-		margin: 1.6% 0.5% 0.5% 0.5%;
-		width: 18%;
-		background-color:white;
-		transition: transform .2s; /* Animation */
-		height: 80%;
-	}
-	.cardContainer img{
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-	.cardContainer:hover {
-		transform: scale(1.5) translateY(0%);
-	}
-	.templates{
-		background-color:green;
-		float:left;
-		margin: 0px;
-		width: 100%;
-		height: 55%;
-		padding:5px;
-	}
-	.templateContainer{
-		float:left;
-		margin: 1% 1% 1% 1%;
-		width: 29%;
-		background-color:white;
-		height: 80%;
-		transition: transform .2s; /* Animation */
-	    display: inline-block;
-	}
-	.templateContainer img{
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-	.templateContainer:hover {
-		transform: scale(1.4) translateY(-10%);
-	}
-	.memes{
-		width: 100%;
-		height:90%;
-		background-color:red;
-		float:left;
-	}
-	.memeContainer{
-		width:32%;
-		height:auto;
-		margin-left:3%;
-		margin: auto;
-		float:left;
-	}
-	.memeContainer canvas{
-		width: 100%;
-		height: auto;
-		float:left;
-	    transition: transform .2s; /* Animation */
-	    object-fit:scale-down;
-	}
-
-	.memeContainer canvas:hover {
-		transform: scale(1.4) translateY(-10%);
-	}
-
-	</style>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 	<script src="lib/jquery-3.3.1.min.js"></script>
+	<script src="js/lobby.js"></script>
 	<script src="js/connect.js"></script>
 	<script src="js/chat.js"></script>
 	<script src="js/game.js"></script>
 	<script src="js/image.js"></script>
 
 	<body>
-		<section class="upperHead">
-
-			<div class='leftColumn'>
-
-				<div style="background-color:lightblue" class='playerDisplay'>
-					<pre hidden id="player0"><hr></pre>
-					<pre hidden id="player1"><hr></pre>
-					<pre hidden id="player2"><hr></pre>
-					<pre hidden id="player3"><hr></pre>
-					<pre hidden id="player4"><hr></pre>
-					<pre hidden id="player5"><hr></pre>
-					<pre hidden id="player6"><hr></pre>
-					<pre hidden id="player7"><hr></pre>
-					<pre hidden id="player8"><hr></pre>
-					<pre hidden id="player9"><hr></pre>
+		<section id="lobby" class="lobby">
+			<div class="lobbyTopBar">
+				<div class="createRoom">
+					<input type="button" id="createRoom" onclick="createRoom();" value="Create a Room">
+					Private <input type="checkbox" id="privateRoom">
+				</div>
+				<div class="joinRoom">
+					<input id="roomInput" type="text" maxlength="4" style="text-transform:uppercase; width:72px"/>
+					<input type="button" id="joinRoom" onclick="joinRoom(String(document.getElementById('roomInput').value.toUpperCase()))" value="Join Room">
+				</div>
+			</div>
+				<div class="refreshLobby">
+					<input type="button" id="refreshLobby" onclick="socket.emit('updateRooms');" value="Refresh">
 				</div>
 
-				<div class="chat">
-					[CHAT]
-					<div class="chatLog" id="chatLog">
-						<p id="chat"></p>
-					</div>
-					<div class="chatInput">
-						<input id='chatInput' type='text' message='message'/>
-					</div>
-				</div>
+			<div id="lobbyRooms" class="lobbyRooms">
+			</div>
+		</section>
 
+		<section hidden id="game" class="upperHead">
+
+			<div class="topBar">
+				<div class="title">
+					<p> Shitpost Game </p>
+				</div>
+					<div class='roomDisplay'>
+						<p id='roomDisplay'></p>
+					</div>
+				<div class="timer" id="timer">
+					Time: --
+				</div>
+				<div hidden onclick="reRoll();" class="reRoll" id="reRoll">
+					Re-roll
+					<img id="reRollCounter" src="assets/roll3.png">
+				</div>
 			</div>
 
-
-
-
-			<div style="background-color:yellow" class="gamePlay">
-				<div class="topFrame">
-					<div class="message">
-						<h3 id="turnTimer"></h3>
+			<div class='gameContainer'>
+				<div class='leftColumn'>
+					<div onclick="exitRoom();" class='roomDisplayExit'>
+						⤺ Exit Room
 					</div>
-					<div class="reroll">
-						<input id="reroll" type="submit" value="Re-roll" onclick="reRoll();" />
+					<div class='playerDisplay'>
+						<pre hidden id="player0"><hr></pre>
+						<pre hidden id="player1"><hr></pre>
+						<pre hidden id="player2"><hr></pre>
+						<pre hidden id="player3"><hr></pre>
+						<pre hidden id="player4"><hr></pre>
+						<pre hidden id="player5"><hr></pre>
+						<pre hidden id="player6"><hr></pre>
+						<pre hidden id="player7"><hr></pre>
+						<pre hidden id="player8"><hr></pre>
+						<pre hidden id="player9"><hr></pre>
 					</div>
+
+					<div class="chat">
+						<div class="chatLog" id="chatLog">
+							<p id="chat"></p>
+						</div>
+						<div class="chatInput">
+							<input id='chatInput' type='text' message='message'/>
+						</div>
+					</div>
+
 				</div>
 
-				<div class="cards" id="cards">
-					Images <br>
-					<div class="cardContainer">
-						<img id="playerCard0" onclick='inputCard(0)'>
+				<div class="gamePlay">
+					<div class="topFrame">
+						<div class="message">
+							<p id="turnTimer"></p>
+						</div>
 					</div>
-					<div class="cardContainer">
-						<img id="playerCard1" onclick='inputCard(1)'>
-					</div>
-					<div class="cardContainer">
-						<img id="playerCard2" onclick='inputCard(2)'>
-					</div>
-					<div class="cardContainer">
-						<img id="playerCard3" onclick='inputCard(3)'>
-					</div>
-					<div class="cardContainer">
-						<img id="playerCard4" onclick='inputCard(4)'>
-					</div>
-				</div>
 
-				<div class="templates" id="templates">
-					Templates <br>
-					<div class="templateContainer">
-						<img id="playerTemplate0" onclick='inputTemplate(0)'>
+					<div hidden class="cards" id="cards">
+						Images <br>
+						<div class="cardContainer">
+							<img id="playerCard0" onclick='inputCard(0)'>
+						</div>
+						<div class="cardContainer">
+							<img id="playerCard1" onclick='inputCard(1)'>
+						</div>
+						<div class="cardContainer">
+							<img id="playerCard2" onclick='inputCard(2)'>
+						</div>
+						<div class="cardContainer">
+							<img id="playerCard3" onclick='inputCard(3)'>
+						</div>
+						<div class="cardContainer">
+							<img id="playerCard4" onclick='inputCard(4)'>
+						</div>
 					</div>
-					<div class="templateContainer">
-						<img id="playerTemplate1" onclick='inputTemplate(1)'>
-					</div>
-					<div class="templateContainer">
-						<img id="playerTemplate2" onclick='inputTemplate(2)'>
-					</div>
-				</div>
 
-				<div hidden id="memes" class="memes">
-					<div class="memeContainer" id="memeContainer0">
-						<pre id="memetext0"></pre></br>
-						<canvas id="meme0" onclick='inputVote(document.getElementById("meme0").value)'></canvas>
+					<div hidden class="templates" id="templates">
+						Templates <br>
+						<div class="templateContainer">
+							<img id="playerTemplate0" onclick='inputTemplate(0)'>
+						</div>
+						<div class="templateContainer">
+							<img id="playerTemplate1" onclick='inputTemplate(1)'>
+						</div>
+						<div class="templateContainer">
+							<img id="playerTemplate2" onclick='inputTemplate(2)'>
+						</div>
 					</div>
-					<div class="memeContainer" id="memeContainer1">
-						<pre id="memetext1"></pre></br>
-						<canvas id="meme1" onclick='inputVote(document.getElementById("meme1").value)'></canvas>
+
+					<div hidden id="memes" class="memes">
+						<div class="memesThumbs">
+
+							<div onmouseover="bigImg(0)" class="memeContainer" id="memeContainer0">
+								<canvas --order=0 id="meme0" onclick='inputVote(0)' style="border:0px solid #000000;"></canvas>
+							</div>
+							<div onmouseover="bigImg(1)" class="memeContainer" id="memeContainer1">
+								<canvas --order=1 id="meme1" onclick='inputVote(1)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div onmouseover="bigImg(2)" class="memeContainer" id="memeContainer2">
+								<canvas --order=2 id="meme2" onclick='inputVote(2)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div onmouseover="bigImg(3)" class="memeContainer" id="memeContainer3">
+								<canvas --order=3 id="meme3" onclick='inputVote(3)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div onmouseover="bigImg(4)" class="memeContainer" id="memeContainer4">
+								<canvas --order=4 id="meme4" onclick='inputVote(4)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div onmouseover="bigImg(5)" class="memeContainer" id="memeContainer5">
+								<canvas --order=5 id="meme5" onclick='inputVote(5)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div onmouseover="bigImg(6)" class="memeContainer" id="memeContainer6">
+								<canvas --order=6 id="meme6" onclick='inputVote(6)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div onmouseover="bigImg(7)" class="memeContainer" id="memeContainer7">
+								<canvas --order=7 id="meme7" onclick='inputVote(7)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div hidden class="memeContainer" id="memeContainer8">
+								<canvas --order=8 id="meme8" onclick='inputVote(8)'style="border:0px solid #000000;"></canvas>
+							</div>
+							<div hidden class="memeContainer" id="memeContainer9">
+								<canvas --order=9 id="meme9" onclick='inputVote(9)'style="border:0px solid #000000;"></canvas>
+							</div>
+						</div>
+						<div class="memeDisplay">
+							<div class="memeDisplayContainer">
+								<img id="memeDisplayCanvas">
+							</div>
+						</div>
 					</div>
-					<div class="memeContainer" id="memeContainer2">
-						<pre id="memetext2"></pre></br>
-						<canvas id="meme2" onclick='inputVote(document.getElementById("meme2").value)'></canvas>
+
+					<div class="results" id="results">
+						<div class="resultsTop">
+							<div class="resultContainerSmall">
+								<div class="resultLabel" id="resultLabel1"></div>
+								<canvas id="resultMeme1"></canvas>
+							</div>
+							<div class="resultContainerBig">
+								<div class="resultLabel" id="resultLabel0"></div>
+								<canvas id="resultMeme0"></canvas>
+							</div>
+							<div class="resultContainerSmall">
+								<div class="resultLabel" id="resultLabel2"></div>
+								<canvas id="resultMeme2"></canvas>
+							</div>
+						</div>
+						<div class="resultsBottom">
+							<p id="resultLabel3"></p><br> 
+							<p id="resultLabel4"></p><br>
+							<p id="resultLabel5"></p><br>
+							<p id="resultLabel6"></p><br>
+							<p id="resultLabel7"></p>
+						</div>
+
+
 					</div>
-					<div class="memeContainer" id="memeContainer3">
-						<pre id="memetext3"></pre></br>
-						<canvas id="meme3" onclick='inputVote(document.getElementById("meme3").value)'></canvas>
-					</div>
-					<div class="memeContainer" id="memeContainer4">
-						<pre id="memetext4"></pre></br>
-						<canvas id="meme4" onclick='inputVote(document.getElementById("meme4").value)'></canvas>
-					</div>
-					<div class="memeContainer" id="memeContainer5">
-						<pre id="memetext5"></pre></br>
-						<canvas id="meme5" onclick='inputVote(document.getElementById("meme5").value)'></canvas>
-					</div>
-					<div class="memeContainer" id="memeContainer6">
-						<pre id="memetext6"></pre></br>
-						<canvas id="meme6" onclick='inputVote(document.getElementById("meme6").value)'></canvas>
-					</div>
-					<div class="memeContainer" id="memeContainer7">
-						<pre id="memetext7"></pre></br>
-						<canvas id="meme7" onclick='inputVote(document.getElementById("meme7").value)'></canvas>
-					</div>
-					<div class="memeContainer" id="memeContainer8">
-						<pre id="memetext8"></pre></br>
-						<canvas id="meme8" onclick='inputVote(document.getElementById("meme8").value)'></canvas>
-					</div>
-					<div class="memeContainer" id="memeContainer9">
-						<pre id="memetext9"></pre></br>
-						<canvas id="meme9" onclick='inputVote(document.getElementById("meme9").value)'></canvas>
-					</div>
+
 				</div>
 			</div>
 		</section>
