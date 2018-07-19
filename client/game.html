@@ -20,20 +20,29 @@
 	<body>
 		<section id="lobby" class="lobby">
 			<div class="lobbyTopBar">
-				<div class="createRoom">
-					<input type="button" id="createRoom" onclick="createRoom();" value="Create a Room">
-					Private <input type="checkbox" id="privateRoom">
-				</div>
-				<div class="joinRoom">
-					<input id="roomInput" type="text" maxlength="4" style="text-transform:uppercase; width:72px"/>
-					<input type="button" id="joinRoom" onclick="joinRoom(String(document.getElementById('roomInput').value.toUpperCase()))" value="Join Room">
-				</div>
-			</div>
-				<div class="refreshLobby">
-					<input type="button" id="refreshLobby" onclick="socket.emit('updateRooms');" value="Refresh">
+				<div class="userDisplay" id="userDisplay">
+					
 				</div>
 
-			<div id="lobbyRooms" class="lobbyRooms">
+			</div>
+			<div class="lobbyBody">
+				<div class="lobbyBar">
+					<div class="refresh">
+						<input type="button" id="refreshLobby" onclick="socket.emit('updateRooms');" value="Refresh">
+					</div>
+					<div class="createRoom">
+						<input type="button" id="createRoom" onclick="createRoom();" value="Create a Room">
+					</div>
+					<div class="private">
+						Private <input type="checkbox" id="privateRoom">
+					</div>
+					<div class="joinRoom">
+						<input id="roomInput" type="text" maxlength="4" style="text-transform:uppercase; width:72px"/>
+						<input type="button" id="joinRoom" onclick="joinRoom(String(document.getElementById('roomInput').value.toUpperCase()))" value="Join Room">
+					</div>
+				</div>
+				<div id="lobbyRooms" class="lobbyRooms">
+				</div>
 			</div>
 		</section>
 

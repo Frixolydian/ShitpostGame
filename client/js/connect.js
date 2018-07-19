@@ -24,6 +24,7 @@ socket.on('noRoom', function(){
 	alert("ROOM DOESN'T EXIST");
 	document.getElementById('lobby').hidden = false;
 	document.getElementById('game').hidden = true;
+	socket.emit('updateRooms');
 })
 
 
@@ -32,8 +33,12 @@ socket.on('getRoom', function(data){
 	for (var i in data.players){
 		document.getElementById("player" + data.players[i].order).innerHTML = data.players[i].name + ': ' + data.players[i].score + "<hr>";
 		document.getElementById("player" + data.players[i].order).hidden = false;
+		console.log(data.players[i].id)
+		console.log(socketId)
+		if (data.players[i].id == socketId){
+			document.getElementById('player' + data.players[i].order).style.color = '#c3d537'
+		}
 	}
-	console.log(data)
 	if (data.private == true){
 		document.getElementById('roomDisplay').innerHTML = '🔒 Room ' + data.room;
 	}
@@ -66,10 +71,15 @@ socket.on('playerLeft', function(data){
 	for (var i = 0; i <= 9; i++){
 		document.getElementById('player' + i).innerHTML = '';
 		document.getElementById('player' + i).hidden = true;
+		document.getElementById('player' + i).style.color = '#ffffff'
 	}
 	for (var i in data.room){
 		document.getElementById('player' + data.room[i].order).innerHTML = data.room[i].name + ': ' + data.room[i].score + "<hr>";
 		document.getElementById('player' + data.room[i].order).hidden = false;
+		console.log(data.room[i].id)
+		if (data.room[i].id == socketId){
+			document.getElementById('player' + data.room[i].order).style.color = '#c3d537'
+		}
 	}
 })
 

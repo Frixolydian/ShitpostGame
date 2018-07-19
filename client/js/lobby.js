@@ -9,8 +9,10 @@ socket.on('emitSocketId', function(data){
 var joinButton = {};
 
 
-
 socket.on('roomList', function(data){
+
+	document.getElementById('userDisplay').innerHTML = 'Welcome, ' + sessionStorage.getItem('username')
+
 	var myNode = document.getElementById("lobbyRooms");
 	while (myNode.firstChild) {
 	    myNode.removeChild(myNode.firstChild);

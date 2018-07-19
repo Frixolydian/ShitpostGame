@@ -34,6 +34,7 @@ socket.on('everyoneVote', function(data){
 	document.getElementById('cards').hidden = true;
 	document.getElementById('templates').hidden = true;
 	document.getElementById('memes').hidden = false;
+	document.getElementById('memeDisplayCanvas').hidden = true;
 	document.getElementById('memeDisplayCanvas').src = '';
 	for (var i = 0; i < 10; i++){
 		document.getElementById('memeContainer' + i).hidden = true;
@@ -72,6 +73,10 @@ socket.on('results', function(data){
 			makeMeme(byVotes[i].template, byVotes[i].image, 'resultMeme' + i);
 		}
 		document.getElementById('resultLabel' + i).innerHTML = byVotes[i].name + " +" + byVotes[i].votes;
+		document.getElementById('resultLabel' + i).style.color = '#ffffff'
+		if (byVotes[i].id == socketId){
+			document.getElementById('resultLabel' + i).style.color = '#c3d537'
+		}
 	}
 })
 
@@ -79,7 +84,7 @@ function inputVote(meme){
 	for (var i = 0; i < 10; i++){
 		document.getElementById('memeContainer' + i).style.border = "solid 0.7px #979797";
 	}
-		document.getElementById('memeContainer' + meme).style.border = "solid 4px #c3d537";
+	document.getElementById('memeContainer' + meme).style.border = "solid 4px #c3d537";
 	socket.emit('inputVote', {id: sessionStorage.getItem('socketId'), vote: document.getElementById('meme' + meme).value})
 }
 

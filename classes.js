@@ -153,7 +153,7 @@ exports.Room = function(id, private){
 		//get everyone's selection
 		self.memes = [];
 		for (var i in self.players){
-			self.memes.push({name: self.players[i].name, image: self.players[i].cards[self.players[i].chosenCard], template: self.players[i].templates[self.players[i].chosenTemplate], id: self.players[i].id, order: self.memes.length, votes: 0})
+			self.memes.push({id: self.players[i].id, name: self.players[i].name, image: self.players[i].cards[self.players[i].chosenCard], template: self.players[i].templates[self.players[i].chosenTemplate], id: self.players[i].id, order: self.memes.length, votes: 0})
 			self.players[i].cards.splice(self.players[i].chosenCard, 1, Math.floor(Math.random()*imageN))
 			self.players[i].templates.splice(self.players[i].chosenTemplate, 1, Math.floor(Math.random()*templateN))
 			if (self.players[i].inGame == true){
