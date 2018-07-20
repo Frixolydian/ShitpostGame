@@ -20,6 +20,7 @@ socket.on('updateCards', function(data){
 	document.getElementById('reRoll').hidden = false;
 	document.getElementById('templates').hidden = false;
 	document.getElementById('memes').hidden = true;
+	document.getElementById('results').hidden = true;
 	for (var i = 0; i < 5; i++){
 		document.getElementById('playerCard' + i).src = "../assets/images/image" + data.cards[i] + ".png"
 	}
@@ -63,19 +64,23 @@ socket.on('results', function(data){
 	document.getElementById('templates').hidden = true;
 	document.getElementById('memes').hidden = true;
 	document.getElementById('results').hidden = false;
-/*	for (var i = 0; i < 10; i++){
-		document.getElementById('memeContainer' + i).hidden = true;		
+
+	for (var i = 3; i < 7; i++){
+		document.getElementById('resultLabel' + i).hidden = true;
 	}
-*/
+
 	for (var i = 0; i < byVotes.length; i++){
-//		document.getElementById('memeContainer' + i).hidden = false;
 		if (i < 3){
 			makeMeme(byVotes[i].template, byVotes[i].image, 'resultMeme' + i);
+			document.getElementById('resultLabel' + i).style.color = '#ffffff';
 		}
+		else{
+			document.getElementById('resultLabel' + i).style.color = '#222741';
+		}
+		document.getElementById('resultLabel' + i).hidden = false;
 		document.getElementById('resultLabel' + i).innerHTML = byVotes[i].name + " +" + byVotes[i].votes;
-		document.getElementById('resultLabel' + i).style.color = '#ffffff'
 		if (byVotes[i].id == socketId){
-			document.getElementById('resultLabel' + i).style.color = '#c3d537'
+			document.getElementById('resultLabel' + i).style.color = '#c3d537';
 		}
 	}
 })
