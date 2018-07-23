@@ -76,9 +76,18 @@ html, body {
 	padding-right:1%;
 }
 
+.roomText{
+	font-family: 'Roboto';
+	font-size: 15px;
+	color: #222741;
+	margin:5px;
+	width:70%;
+	float:left;
+	height:100%;
+}
+
 .room{
 	margin-top: 15px;
-	padding:5px;
 	float:left;
 	width:30%;
 	height:100px;

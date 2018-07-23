@@ -30,6 +30,11 @@ socket.on('noRoom', function(){
 
 //return to user all match data
 socket.on('getRoom', function(data){
+	for (var i = 0; i <= 9; i++){
+		document.getElementById('player' + i).innerHTML = '';
+		document.getElementById('player' + i).hidden = true;
+		document.getElementById('player' + i).style.color = '#ffffff'
+	}
 	for (var i in data.players){
 		document.getElementById("player" + data.players[i].order).innerHTML = data.players[i].name + ': ' + data.players[i].score + "<hr>";
 		document.getElementById("player" + data.players[i].order).hidden = false;

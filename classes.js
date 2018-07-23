@@ -17,8 +17,8 @@ function shuffle(array) {
   return array;
 }
 
-var imageN = 511;
-var templateN = 116;
+var imageN = 512;
+var templateN = 237;
 
 exports.Player = function(id, name, order){
 	var self = {

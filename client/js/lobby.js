@@ -27,9 +27,17 @@ socket.on('roomList', function(data){
 			joinButton[i].appendChild(document.createTextNode("JOIN"));
 			joinButton[i].onclick = function(){joinRoom(this.value)};
 			var roomDiv = document.createElement('div');
-			roomDiv.innerHTML = data[i].id;
-			roomDiv.innerHTML += (' (' + Object.keys(data[i].players).length + '/8)');
-			roomDiv.appendChild(joinButton[i])
+			var roomText = document.createElement('div');
+			roomText.className = 'roomText';
+			roomText.innerHTML = data[i].id;
+			roomText.innerHTML += (' (' + Object.keys(data[i].players).length + '/8) <br> Players: ');
+			for (var j in data[i].players){
+				roomText.innerHTML += data[i].players[j].name;
+				roomText.innerHTML += ', ';
+			}
+			roomText.innerHTML = roomText.innerHTML.substring(0, roomText.innerHTML.length - 2);
+			roomDiv.appendChild(roomText);
+			roomDiv.appendChild(joinButton[i]);
 			roomDiv.className="room";
 			document.getElementById('lobbyRooms').appendChild(roomDiv);
 		}
