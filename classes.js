@@ -17,7 +17,7 @@ function shuffle(array) {
   return array;
 }
 
-var imageN = 512;
+var imageN = 628;
 var templateN = 237;
 
 exports.Player = function(id, name, order){
@@ -34,6 +34,7 @@ exports.Player = function(id, name, order){
 		vote: null,
 		inGame: false,
 		rerolls: 3,
+		ready: false,
 	}
 	self.getCards = function(sockets){
 		//draw 5 cards
@@ -75,8 +76,19 @@ exports.Room = function(id, private){
 		gamePhase: 'none', //phases: DRAW, PLAY, VOTE, RESULTS, WINNER
 		gameMessage: 'Waiting for players...',
 		memes: [],
-		timers: [20, 130, 120, 60, 0],
+		timers: [20, 130, 90, 60, 0],
 		maxScore: 10,
+	}
+	self.checkReady = function(){
+		var j = 0;
+		for (var i in self.players){
+			if (self.players[i].ready == true){
+				j +=1;
+			}
+		}
+		if (Object.keys(self.players).length == j){
+			self.turnTimer = 0;
+		}
 	}
 	self.orderPlayers = function(k){
 		for (var i in self.players){
@@ -153,6 +165,7 @@ exports.Room = function(id, private){
 		//get everyone's selection
 		self.memes = [];
 		for (var i in self.players){
+			self.players[i].ready = false;
 			self.memes.push({id: self.players[i].id, name: self.players[i].name, image: self.players[i].cards[self.players[i].chosenCard], template: self.players[i].templates[self.players[i].chosenTemplate], id: self.players[i].id, order: self.memes.length, votes: 0})
 			self.players[i].cards.splice(self.players[i].chosenCard, 1, Math.floor(Math.random()*imageN))
 			self.players[i].templates.splice(self.players[i].chosenTemplate, 1, Math.floor(Math.random()*templateN))
@@ -175,7 +188,9 @@ exports.Room = function(id, private){
 			for (var j in self.players){
 				if (self.players[j].vote == self.memes[i].order){
 					self.memes[i].votes += 1;
-					self.players[self.memes[i].id].score += 1;
+					if (self.players[self.memes[i].id]) {
+						self.players[self.memes[i].id].score += 1;
+					}
 				}
 			}
 		}
@@ -208,7 +223,7 @@ exports.Room = function(id, private){
 						break;
 					case 'PLAY':
 						self.play(sockets);
-						self.turnTimer = self.timers[2];
+						self.turnTimer = self.timers[2] + Object.keys(self.players).length * 10;
 						self.gamePhase = 'VOTE';
 						self.gameMessage = 'Vote for your favorite meme!';
 						break;

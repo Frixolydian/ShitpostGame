@@ -126,12 +126,20 @@ io.sockets.on('connection', function(socket){
 	})
 	socket.on('reRoll', function(data){
 		if(searchRoom(data.id)){
-			var player = searchId(data.id);
 			if(ROOM_LIST[searchRoom(data.id)].gameStart == true){
 				ROOM_LIST[searchRoom(data.id)].players[data.id].reRoll(SOCKET_LIST);
 			}
 		}
 	})
+	socket.on('playerReady', function(data){
+		if(searchRoom(data.id)){
+			ROOM_LIST[searchRoom(data.id)].players[data.id].ready = true;
+			if(ROOM_LIST[searchRoom(data.id)].gameStart == true){
+				ROOM_LIST[searchRoom(data.id)].checkReady();
+			}
+		}
+	})
+
 
 	socket.on('exitRoom', function(){
 		//remove player from room
@@ -159,8 +167,6 @@ io.sockets.on('connection', function(socket){
 			}
 		}
 	})
-
-
 
 
 	socket.on('disconnect', function(){

@@ -1,6 +1,7 @@
 var selectedCard = 0;
 var selectedTemplate = 0;
 var selectedVote = null;
+var vote = false;
 
 socket.on('updateTurnTimer', function(data){
 	document.getElementById('turnTimer').innerHTML = data.message;
@@ -31,6 +32,10 @@ socket.on('updateCards', function(data){
 })
 
 socket.on('everyoneVote', function(data){
+	selectedVote = null;
+	vote = false;
+	document.getElementById('voteButton').style.backgroundColor = '#222741';
+	document.getElementById('voteButton').style.color = '#c3d537';
 	document.getElementById('reRoll').hidden = true;
 	document.getElementById('cards').hidden = true;
 	document.getElementById('templates').hidden = true;
@@ -86,11 +91,14 @@ socket.on('results', function(data){
 })
 
 function inputVote(meme){
-	for (var i = 0; i < 10; i++){
-		document.getElementById('memeContainer' + i).style.border = "solid 0.7px #979797";
+	if (vote == false){
+		for (var i = 0; i < 10; i++){
+			document.getElementById('memeContainer' + i).style.border = "solid 0.7px #979797";
+		}
+		document.getElementById('memeContainer' + meme).style.border = "solid 4px #c3d537";
+		socket.emit('inputVote', {id: sessionStorage.getItem('socketId'), vote: document.getElementById('meme' + meme).value})
+		selectedVote = meme;
 	}
-	document.getElementById('memeContainer' + meme).style.border = "solid 4px #c3d537";
-	socket.emit('inputVote', {id: sessionStorage.getItem('socketId'), vote: document.getElementById('meme' + meme).value})
 }
 
 function inputCard(card){
@@ -114,4 +122,13 @@ function inputTemplate(template){
 
 function reRoll(){
 	socket.emit('reRoll', {id: sessionStorage.getItem('socketId')});
+}
+
+function voteButton(){
+	if (selectedVote != null && vote == false){
+		document.getElementById('voteButton').style.backgroundColor = '#c2c5d4';
+		document.getElementById('voteButton').style.color = '#222741';
+		vote = true;
+		socket.emit('playerReady', {id:sessionStorage.getItem('socketId')})
+	}
 }

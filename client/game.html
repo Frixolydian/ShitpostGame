@@ -21,9 +21,8 @@
 		<section id="lobby" class="lobby">
 			<div class="lobbyTopBar">
 				<div class="userDisplay" id="userDisplay">
-					
-				</div>
 
+				</div>
 			</div>
 			<div class="lobbyBody">
 				<div class="lobbyBar">
@@ -134,29 +133,28 @@
 
 					<div hidden id="memes" class="memes">
 						<div class="memesThumbs">
-
-							<div onmouseover="bigImg(0)" class="memeContainer" id="memeContainer0">
+							<div onmouseover="bigImg(0)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer0">
 								<canvas --order=0 id="meme0" onclick='inputVote(0)' style="border:0px solid #000000;"></canvas>
 							</div>
-							<div onmouseover="bigImg(1)" class="memeContainer" id="memeContainer1">
+							<div onmouseover="bigImg(1)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer1">
 								<canvas --order=1 id="meme1" onclick='inputVote(1)'style="border:0px solid #000000;"></canvas>
 							</div>
-							<div onmouseover="bigImg(2)" class="memeContainer" id="memeContainer2">
+							<div onmouseover="bigImg(2)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer2">
 								<canvas --order=2 id="meme2" onclick='inputVote(2)'style="border:0px solid #000000;"></canvas>
 							</div>
-							<div onmouseover="bigImg(3)" class="memeContainer" id="memeContainer3">
+							<div onmouseover="bigImg(3)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer3">
 								<canvas --order=3 id="meme3" onclick='inputVote(3)'style="border:0px solid #000000;"></canvas>
 							</div>
-							<div onmouseover="bigImg(4)" class="memeContainer" id="memeContainer4">
+							<div onmouseover="bigImg(4)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer4">
 								<canvas --order=4 id="meme4" onclick='inputVote(4)'style="border:0px solid #000000;"></canvas>
 							</div>
-							<div onmouseover="bigImg(5)" class="memeContainer" id="memeContainer5">
+							<div onmouseover="bigImg(5)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer5">
 								<canvas --order=5 id="meme5" onclick='inputVote(5)'style="border:0px solid #000000;"></canvas>
 							</div>
-							<div onmouseover="bigImg(6)" class="memeContainer" id="memeContainer6">
+							<div onmouseover="bigImg(6)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer6">
 								<canvas --order=6 id="meme6" onclick='inputVote(6)'style="border:0px solid #000000;"></canvas>
 							</div>
-							<div onmouseover="bigImg(7)" class="memeContainer" id="memeContainer7">
+							<div onmouseover="bigImg(7)" onmouseout="bigImg(selectedVote)" class="memeContainer" id="memeContainer7">
 								<canvas --order=7 id="meme7" onclick='inputVote(7)'style="border:0px solid #000000;"></canvas>
 							</div>
 							<div hidden class="memeContainer" id="memeContainer8">
@@ -169,6 +167,10 @@
 						<div class="memeDisplay">
 							<div class="memeDisplayContainer">
 								<img id="memeDisplayCanvas">
+							</div>
+							<br>
+							<div id="voteButton" class="voteButton" onclick="voteButton();">
+								VOTE
 							</div>
 						</div>
 					</div>
