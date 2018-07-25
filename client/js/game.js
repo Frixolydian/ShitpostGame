@@ -3,6 +3,7 @@ var selectedTemplate = 0;
 var selectedVote = null;
 var vote = false;
 
+
 socket.on('updateTurnTimer', function(data){
 	document.getElementById('turnTimer').innerHTML = data.message;
 	document.getElementById('timer').innerHTML = 'Time: ' + Math.floor(data.turnTimer / 5);

@@ -44,8 +44,17 @@ html, body {
 	font-size: 20px;
 	font-weight: bold;
 	color: #ffffff;
-	width:50%;
 	float:left;
+}
+
+.playersOnline{
+	margin-top:15px;
+	padding-right:14px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	color: #ffffff;
+	float:right;
 }
 
 .refresh{

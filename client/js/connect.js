@@ -10,7 +10,6 @@ function getQueryVariable(variable) {
     console.log('Query variable %s not found', variable);
 }
 
-
 function createRoom(){
 	socket.emit('newRoom', {id: sessionStorage.getItem('socketId'), username: sessionStorage.getItem('username'), private: document.getElementById('privateRoom').checked ? true : false});
 }
@@ -38,8 +37,6 @@ socket.on('getRoom', function(data){
 	for (var i in data.players){
 		document.getElementById("player" + data.players[i].order).innerHTML = data.players[i].name + ': ' + data.players[i].score + "<hr>";
 		document.getElementById("player" + data.players[i].order).hidden = false;
-		console.log(data.players[i].id)
-		console.log(socketId)
 		if (data.players[i].id == socketId){
 			document.getElementById('player' + data.players[i].order).style.color = '#c3d537'
 		}
@@ -81,7 +78,6 @@ socket.on('playerLeft', function(data){
 	for (var i in data.room){
 		document.getElementById('player' + data.room[i].order).innerHTML = data.room[i].name + ': ' + data.room[i].score + "<hr>";
 		document.getElementById('player' + data.room[i].order).hidden = false;
-		console.log(data.room[i].id)
 		if (data.room[i].id == socketId){
 			document.getElementById('player' + data.room[i].order).style.color = '#c3d537'
 		}

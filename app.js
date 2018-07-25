@@ -66,12 +66,15 @@ io.sockets.on('connection', function(socket){
 	SOCKET_LIST[socket.id] = socket;
 
 	socket.emit('emitSocketId', socket_id);
-	socket.emit('roomList', ROOM_LIST);
+	socket.emit('roomList', {rooms: ROOM_LIST, playercount: io.engine.clientsCount});
 
 	socket.on('updateRooms', function(){
-		socket.emit('roomList', ROOM_LIST);
+		socket.emit('roomList', {rooms: ROOM_LIST, playercount: io.engine.clientsCount});
 	})
 
+	socket.on('setUsername', function(data){
+		PLAYER_LIST[data.id] = {id: data.id, username: data.username}
+	})
 
 	socket.on('newRoom', function(data){
 		var code = createCode();
