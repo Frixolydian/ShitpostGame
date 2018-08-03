@@ -111,21 +111,29 @@ io.sockets.on('connection', function(socket){
 
 //receive players' input
 	socket.on('inputChat', function(data){
-		var player = searchId(data.id);
-		ROOM_LIST[searchRoom(data.id)].chatlog.push(player.name + ': ' + data.message)
-		//update everyone chat
+		if(searchRoom(data.id)){
+			var player = searchId(data.id);
+			ROOM_LIST[searchRoom(data.id)].chatlog.push(player.name + ': ' + data.message)
+			//update everyone chat
+		}
 	})
 	socket.on('inputCard', function(data){
-		var player = searchId(data.id);
-		ROOM_LIST[searchRoom(data.id)].players[data.id].chosenCard = data.card;
+		if(searchRoom(data.id)){
+			var player = searchId(data.id);
+			ROOM_LIST[searchRoom(data.id)].players[data.id].chosenCard = data.card;
+		}
 	})
 	socket.on('inputTemplate', function(data){
-		var player = searchId(data.id);
-		ROOM_LIST[searchRoom(data.id)].players[data.id].chosenTemplate = data.template;
+		if(searchRoom(data.id)){
+			var player = searchId(data.id);
+			ROOM_LIST[searchRoom(data.id)].players[data.id].chosenTemplate = data.template;
+		}
 	})
 	socket.on('inputVote', function(data){
-		var player = searchId(data.id);
-		ROOM_LIST[searchRoom(data.id)].players[data.id].vote = data.vote;
+		if(searchRoom(data.id)){
+			var player = searchId(data.id);
+			ROOM_LIST[searchRoom(data.id)].players[data.id].vote = data.vote;
+		}
 	})
 	socket.on('reRoll', function(data){
 		if(searchRoom(data.id)){
