@@ -20,28 +20,37 @@
 	<body>
 		<section id="lobby" class="lobby">
 			<div class="lobbyTopBar">
-				<div class="userDisplay" id="userDisplay">
+				<div class="title">
+					<p> Shitpost Game </p>
 				</div>
+				<input type="button" id="refreshLobby" class="refresh" onclick="socket.emit('updateRooms');" value="⭯ Refresh">
 				<div class="playersOnline" id="playersOnline">
 				</div>
+
+
 			</div>
 			<div class="lobbyBody">
-				<div class="lobbyBar">
-					<div class="refresh">
-						<input type="button" id="refreshLobby" onclick="socket.emit('updateRooms');" value="Refresh">
+				<div class="lobbyLeftColumn">
+					<div class="userDisplay" id="userDisplay">
 					</div>
-					<div class="createRoom">
-						<input type="button" id="createRoom" onclick="createRoom();" value="Create a Room">
-					</div>
+					<input type="button" id="createRoom" class="createRoom" onclick="createRoom();" value="Create a Room">
 					<div class="private">
 						Private <input type="checkbox" id="privateRoom">
 					</div>
 					<div class="joinRoom">
-						<input id="roomInput" type="text" maxlength="4" style="text-transform:uppercase; width:72px"/>
-						<input type="button" id="joinRoom" onclick="joinRoom(String(document.getElementById('roomInput').value.toUpperCase()))" value="Join Room">
+						Enter with a code
 					</div>
+						<input id="roomInput" class="roomInput" type="text" maxlength="4" style="text-transform:uppercase;"/>
+						<input type="button" id="joinButton" class="joinButton" onclick="joinRoom(String(document.getElementById('roomInput').value.toUpperCase()))" value="Join Room">
 				</div>
-				<div id="lobbyRooms" class="lobbyRooms">
+				<div class="lobbyRightColumn">
+					<div class="topFrame">
+						<div class="message">
+							<p>Rooms:</p>
+						</div>
+					</div>
+					<div id="lobbyRooms" class="lobbyRooms">
+					</div>
 				</div>
 			</div>
 		</section>

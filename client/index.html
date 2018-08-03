@@ -3,25 +3,31 @@
 	<meta charset=utf-8>
 	<head>
 	<title>Shitpost Game</title>
-    <style> body { margin: 0; background: #777; } </style>
+    <style> body { margin: 0; background: #222741; } </style>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
 	</head>
 
-<h1 style="text-align: center;"> Input name and join the magical world of Shitposting ▽・ᴥ・▽
+	<section class="topBar">
+		
 
-</br>
-<img src="https://media.giphy.com/media/Rg2dCgs7bUYVO/giphy.gif" alt="Mountain View">
+	</section>
 
-</br>
-
-</h1>
+	<section class="content">
+		<div class="logo">
+			<img src="assets/logo.png"> <br>
+		</div>
+		Pick a username and enter
 
 
 <h1 style="text-align: center;">
 	<form action="/game.html">
-	    Username <input id="usernameInput" type="text" enctype="text/plain" minlength=3 maxlength="12"/></br>
-	    <input type="submit" onclick="enterGame()" value="Enter"/>
+	    <input class="usernameInput" id="usernameInput" type="text" enctype="text/plain" minlength=3 maxlength="12"/></br>
+	    <input class="usernameButton" type="submit" onclick="enterGame()" value="ENTER"/>
 	</form>
 </h1>
+
+</section>
+
 
 
 <script>

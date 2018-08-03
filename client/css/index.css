@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+
+* {
+    box-sizing: border-box;
+}
+html, body {
+	margin: 0px;
+	height: 100%;
+	padding: 0px;
+}
+/*CREATE LEFT COLUMN WITH PLAYERS*/
+
+.topBar{
+	margin:0px;
+	height:8%;
+	width:100%;
+	background-color: #222741;
+}
+
+.content{
+	height:92%;
+	text-align:center;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	color: #ffffff;
+}
+.logo{
+	height:55%;
+	margin-bottom:2%;
+}
+.logo img{
+	height:100%;
+	width:auto;
+}
+
+.usernameInput{
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	color: #222741;
+	text-align:center;
+	width:21%;
+	padding:5px;
+    outline: 2px solid #c3d537;
+    outline-offset: 2px;
+}
+
+.usernameButton{
+	font-family: 'Roboto';
+	font-weight: bold;
+	font-size: 20px;
+	background-color: #c3d537;
+	border: none;
+	color: #222741;
+	height:40px;
+	width:16%;
+	margin-top:30px;
+	border-radius: 7px;
+}

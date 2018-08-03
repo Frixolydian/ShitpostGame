@@ -23,89 +23,196 @@ html, body {
 	background-color: #454a64;
 }
 
-.lobbyBar{
-	height:7%;
-	width:100%;
-	background-color: #c2c5d4;
+.lobbyLeftColumn{
+	height:100%;
+	width:17%;
+	background-color: #454a64;
+	float:left;
 }
 
+
+
 .lobbyRooms{
-	margin-left:20%;
-	width:60%;
+	width:100%;
 	background-color: #d8d8d8;
 	height:93%;
 	overflow-y: auto;
+	float:left;
 }
 
 .userDisplay{
 	margin-top:15px;
-	padding-left:14px;
-	font-family: 'Roboto', sans-serif;
-	font-size: 20px;
+	margin-left:8%;
+	font-family: 'Roboto';
+	font-size: 14px;
 	font-weight: bold;
+	color: #ffffff;
+}
+
+.createRoom{
+	margin-top:10px;
+	margin-left:8%;
+	width:84%;
+	height:45px;
+	font-family: 'Roboto';
+	font-size: 14px;
+	font-weight: bold;
+	color: #222741;
+	border-radius: 2px;
+	background-color: #c3d537;
+	border:none;
+	box-shadow: 0 2px 4px 0 rgba(34, 39, 65, 0.5);
+}
+.private{
+	margin-top:4px;
+	float:left;
+	margin-left:8%;
+	font-family: 'Roboto';
+	font-size: 12px;
 	color: #ffffff;
 	float:left;
 }
 
+
+
+.joinRoom{
+	margin-top:72px;
+	margin-left:8%;
+	font-family: 'Roboto';
+	font-size: 14px;
+	color: #ffffff;
+}
+
+.roomInput{
+	margin-left:8%;
+	margin-top:7px;
+	width:84%;
+	height:30px;
+	text-align:center;
+	color:#898989;
+}
+
+.joinButton{
+	margin-top:8px;
+	margin-left:8%;
+	width:84%;
+	height:45px;
+	font-family: 'Roboto';
+	font-size: 14px;
+	font-weight: bold;
+	color: #222741;
+	border-radius: 2px;
+	background-color: #c2c5d4;
+	border:none;
+	box-shadow: 0 2px 4px 0 rgba(34, 39, 65, 0.5);
+}
+
+.lobbyRightColumn{
+	width:83%;
+	background-color: #d8d8d8;
+	height:100%;
+	float:left;
+}
+
 .playersOnline{
-	margin-top:15px;
-	padding-right:14px;
-	font-family: 'Roboto', sans-serif;
-	font-size: 20px;
+	margin-top:18px;
+	margin-right:30px;
+	font-family: 'Roboto';
+	font-size: 14px;
 	font-weight: bold;
 	color: #ffffff;
 	float:right;
 }
 
 .refresh{
-	padding-top:0.5%;
-	float:left;
-	padding-left:1%;
-}
-
-.createRoom{
-	float:left;
-	margin-left:5%;
-	padding-top:0.5%;
-}
-.private{
-	float:left;
-	margin-left:1%;
-	font-family: 'Roboto', bold;
-	font-size: 18px;
-	font-weight: bold;
-	color: #222741;
-	padding-top:0.5%;
-	float:left;
-	padding-left:1%;
-}
-.joinRoom{
-	padding-top:0.5%;
+	margin-right:40px;
+	height:30px;
+	width:100px;
+	margin-top:10px;
 	float:right;
-	padding-right:1%;
-}
-
-.roomText{
+	padding-bottom:3px;
+	border-radius:15px;
+	background-color: #454a64;
+	border:none;
 	font-family: 'Roboto';
-	font-size: 15px;
-	color: #222741;
-	margin:5px;
-	width:70%;
-	float:left;
-	height:100%;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	color: #ffffff;
 }
 
 .room{
-	margin-top: 15px;
+	margin-top:15px;
+	margin-left:30px;
 	float:left;
-	width:30%;
-	height:100px;
-	border-style: solid;
-	margin-left: 100px;
+	width:280px;
 }
 
-.joinButton{
+.roomLabel{
+	padding-top:5px;
+	width:100%;
+	height:30px;
+	border:solid 1px #454a64;
+	font-family: 'Roboto';
+	font-size: 14px;
+	font-weight: bold;
+	background-color: #ffffff;
+	color:#454a64;
+}
+
+.roomName{
+	padding-left:12px;
+	float:left;
+}
+
+.roomCount{
+	padding-right:12px;
 	float:right;
-	height:100%;
-	width:20%;
+}
+
+.roomContent{
+	position:relative;
+	height:120px;
+	border:solid 1px #454a64;
+	margin-top:-1px;
+	background-color:#e6e8ee;
+}
+
+.roomPlayersTitle{
+	padding-top:5px;
+	padding-left:12px;
+	float:left;
+	font-family: 'Roboto';
+	font-size: 14px;
+	font-weight: bold;
+	color:#454a64;
+	height:80%;
+	width:25%;
+}
+
+.roomPlayers{
+    word-wrap: break-word;
+	padding-top:6px;
+	float:left;
+	padding-left:5px;
+	font-family: 'Roboto';
+	font-size: 11px;
+	color:#454a64;
+	height:80%;
+	width:75%;
+}
+
+.roomJoinButton{
+	position:absolute;
+	width:120px;
+	bottom:10px;
+	right:15px;
+	height:30px;
+	border:none;
+	background-color: #222741;
+	box-shadow: 0 2px 4px 0 rgba(34, 39, 65, 0.5);
+	font-family: 'Roboto';
+	font-size: 14px;
+	font-weight: bold;
+	color:#ffffff;
 }
