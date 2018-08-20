@@ -74,7 +74,7 @@ exports.Room = function(id, private){
 		turnTimer: '',
 		turnIndex: 0,
 		gamePhase: 'none', //phases: DRAW, PLAY, VOTE, RESULTS, WINNER
-		gameMessage: 'Waiting for players...',
+		gameMessage: 'Waiting for players (minimum 3 required)...',
 		memes: [],
 		timers: [20, 130, 90, 60, 0],
 		maxScore: 10,
@@ -121,7 +121,7 @@ exports.Room = function(id, private){
 		else if(Object.keys(self.players).length < 3 && self.gameStart == true){
 			self.gameStart = false;
 			self.turnTimer = 0;
-			self.gameMessage = 'Waiting for players...';
+			self.gameMessage = 'Waiting for players (minimum 3 required)...';
 			for (var i in self.players){
 				sockets[self.players[i].id].emit('disconnectEndGame', 0)
 			}
