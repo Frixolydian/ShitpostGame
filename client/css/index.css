@@ -18,6 +18,12 @@ html, body {
 	height:8%;
 	width:100%;
 	background-color: #222741;
+	padding:1%;
+	padding-right:50px;
+}
+.topBar img{
+	float:right;
+	padding-right:30px;
 }
 
 .content{
