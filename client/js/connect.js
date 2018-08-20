@@ -26,6 +26,13 @@ socket.on('noRoom', function(){
 	socket.emit('updateRooms');
 })
 
+socket.on('roomFull', function(){
+	alert("ROOM IS FULL");
+	document.getElementById('lobby').hidden = false;
+	document.getElementById('game').hidden = true;
+	socket.emit('updateRooms');
+})
+
 
 //return to user all match data
 socket.on('getRoom', function(data){

@@ -26,8 +26,6 @@
 				<input type="button" id="refreshLobby" class="refresh" onclick="socket.emit('updateRooms');" value="⭯ Refresh">
 				<div class="playersOnline" id="playersOnline">
 				</div>
-
-
 			</div>
 			<div class="lobbyBody">
 				<div class="lobbyLeftColumn">
@@ -75,9 +73,8 @@
 
 			<div class='gameContainer'>
 				<div class='leftColumn'>
-					<div onclick="exitRoom();" class='roomDisplayExit'>
-						⤺ Exit Room
-					</div>
+					<input type="button" onclick="exitRoom();" class='roomDisplayExit' value='⤺ Exit Room'>
+						
 					<div class='playerDisplay'>
 						<pre hidden id="player0"><hr></pre>
 						<pre hidden id="player1"><hr></pre>
@@ -179,9 +176,7 @@
 								<img id="memeDisplayCanvas">
 							</div>
 							<br>
-							<div id="voteButton" class="voteButton" onclick="voteButton();">
-								VOTE
-							</div>
+							<input type='button' id="voteButton" class="voteButton" onclick="voteButton();" value='VOTE'>
 						</div>
 					</div>
 
@@ -201,11 +196,12 @@
 							</div>
 						</div>
 						<div class="resultsBottom">
-							<p id="resultLabel3"></p><br> 
-							<p id="resultLabel4"></p><br>
-							<p id="resultLabel5"></p><br>
-							<p id="resultLabel6"></p><br>
+							<p id="resultLabel3"></p>
+							<p id="resultLabel4"></p>
+							<p id="resultLabel5"></p>
+							<p id="resultLabel6"></p>
 							<p id="resultLabel7"></p>
+							<p id="resultLabel8"></p>
 						</div>
 
 

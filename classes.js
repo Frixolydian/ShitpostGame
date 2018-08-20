@@ -106,6 +106,9 @@ exports.Room = function(id, private){
 			self.gamePhase = 'DRAW';
 			self.gameMessage = 'Players drawing images';
 			self.chatlog.push("[GAME START]");
+			for (var i in self.players){
+				sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog});
+			}
 			//turn for order 0 player
 			for (var i in self.players){
 				self.players[i].cards = [];
@@ -139,6 +142,9 @@ exports.Room = function(id, private){
 		self.gamePhase = 'DRAW';
 		self.gameMessage = 'Players drawing images';
 		self.chatlog.push("[GAME START]");
+		for (var i in self.players){
+			sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog});
+		}
 		//turn for order 0 player
 		for (var i in self.players){
 			self.players[i].score = 0;
@@ -206,10 +212,9 @@ exports.Room = function(id, private){
 	}
 
 	self.update = function(sockets){
-		//update chat
+		//update turntimer
 		for (var i in self.players){
 			sockets[self.players[i].id].emit('updateTurnTimer', {turnTimer: self.turnTimer, message: self.gameMessage}) //send turn timer
-			sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog});
 		}
 		if (self.gameStart){
 			self.turnTimer -= 1;
@@ -245,5 +250,11 @@ exports.Room = function(id, private){
 			}
 		}
 	}
+	self.updateChat = function(sockets){
+		for (var i in self.players){
+			sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog});
+		}
+	}
+
 	return self;
 }

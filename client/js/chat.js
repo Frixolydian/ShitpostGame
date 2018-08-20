@@ -1,9 +1,8 @@
 function inputChat(){
 	if (socket){
 		socket.emit('inputChat', {id: sessionStorage.getItem('socketId'), message: String(document.getElementById('chatInput').value)})
-		document.getElementById('chatInput').value = '';
-		document.getElementById('chatLog').scrollTop = document.getElementById('chatLog').scrollHeight;
 	}
+	document.getElementById('chatInput').value = '';
 }
 
 window.onkeyup = function(e) {
@@ -19,4 +18,5 @@ socket.on('updateChat', function(data){
 		chat = chat + data.chatlog[i] + '<br>';
 	}
 	document.getElementById('chat').innerHTML = chat;
+	document.getElementById('chatLog').scrollTop = document.getElementById('chatLog').scrollHeight;
 })

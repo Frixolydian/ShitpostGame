@@ -85,24 +85,31 @@ io.sockets.on('connection', function(socket){
 		socket.emit('getRoom', {players: ROOM_LIST[code].players, room: room.id, private: data.private})
 //notify chat
 		ROOM_LIST[code].chatlog.push('-' + player.name + ' connected-')
+		ROOM_LIST[code].updateChat(SOCKET_LIST);
 	})
 
 	socket.on('joinRoom', function(data){
 		if(ROOM_LIST[data.room] !== undefined){
-			var player = m.Player(data.id, data.username, Object.keys(ROOM_LIST[data.room].players).length)
-			ROOM_LIST[data.room].players[data.id] = player;
-			if (ROOM_LIST[data.room].gameStart == true){
-				ROOM_LIST[data.room].players[data.id].inGame = true; //put in game if the game has started
-				ROOM_LIST[data.room].players[data.id].getCards(SOCKET_LIST)
+			if (Object.keys(ROOM_LIST[data.room].players).length < 9){
+				var player = m.Player(data.id, data.username, Object.keys(ROOM_LIST[data.room].players).length)
+				ROOM_LIST[data.room].players[data.id] = player;
+				if (ROOM_LIST[data.room].gameStart == true){
+					ROOM_LIST[data.room].players[data.id].inGame = true; //put in game if the game has started
+					ROOM_LIST[data.room].players[data.id].getCards(SOCKET_LIST)
+				}
+				socket.emit('getRoom', {players: ROOM_LIST[data.room].players, room: data.room, private: ROOM_LIST[data.room].private})
+				//update all other players
+				for (var i in ROOM_LIST[data.room].players){
+					SOCKET_LIST[ROOM_LIST[data.room].players[i].id].emit('newPlayer', ROOM_LIST[data.room].players);
+				}
+				//notify chat
+				ROOM_LIST[data.room].chatlog.push('-' + player.name + ' connected-')
+				ROOM_LIST[data.room].updateChat(SOCKET_LIST);
+				ROOM_LIST[data.room].gameManager(SOCKET_LIST);
 			}
-			socket.emit('getRoom', {players: ROOM_LIST[data.room].players, room: data.room, private: ROOM_LIST[data.room].private})
-			//update all other players
-			for (var i in ROOM_LIST[data.room].players){
-				SOCKET_LIST[ROOM_LIST[data.room].players[i].id].emit('newPlayer', ROOM_LIST[data.room].players);
+			else{
+				socket.emit('roomFull');
 			}
-			//notify chat
-			ROOM_LIST[data.room].chatlog.push('-' + player.name + ' connected-')
-			ROOM_LIST[data.room].gameManager(SOCKET_LIST);
 		}
 		else{
 			socket.emit('noRoom');
@@ -115,6 +122,7 @@ io.sockets.on('connection', function(socket){
 			var player = searchId(data.id);
 			ROOM_LIST[searchRoom(data.id)].chatlog.push(player.name + ': ' + data.message)
 			//update everyone chat
+			ROOM_LIST[searchRoom(data.id)].updateChat(SOCKET_LIST);
 		}
 	})
 	socket.on('inputCard', function(data){
@@ -164,6 +172,7 @@ io.sockets.on('connection', function(socket){
 					delete ROOM_LIST[i].players[socket.id];
 //notify chat
 					ROOM_LIST[i].chatlog.push('-' + player.name + ' disconnected-')
+					ROOM_LIST[i].updateChat(SOCKET_LIST);
 //send removed player to all remaining
 					for (var j in ROOM_LIST[i].players){
 						SOCKET_LIST[ROOM_LIST[i].players[j].id].emit('playerLeft', {player: player, room: ROOM_LIST[i].players});
@@ -195,6 +204,7 @@ io.sockets.on('connection', function(socket){
 					delete ROOM_LIST[i].players[socket.id];
 //notify chat
 					ROOM_LIST[i].chatlog.push('-' + player.name + ' disconnected-')
+					ROOM_LIST[i].updateChat(SOCKET_LIST);
 //send removed player to all remaining
 					for (var j in ROOM_LIST[i].players){
 						SOCKET_LIST[ROOM_LIST[i].players[j].id].emit('playerLeft', {player: player, room: ROOM_LIST[i].players});

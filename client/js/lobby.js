@@ -64,7 +64,7 @@ socket.on('roomList', function(data){
 			roomContent.appendChild(joinButton[i]);
 
 			roomName.innerHTML = data.rooms[i].id;
-			roomCount.innerHTML += '(' + Object.keys(data.rooms[i].players).length + '/8)';
+			roomCount.innerHTML += '(' + Object.keys(data.rooms[i].players).length + '/9)';
 			for (var j in data.rooms[i].players){
 				roomPlayers.innerHTML += data.rooms[i].players[j].name;
 				roomPlayers.innerHTML += ', ';
