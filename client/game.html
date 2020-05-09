@@ -23,7 +23,7 @@
 				<div class="title">
 					<p> Shitpost Game </p>
 				</div>
-				<input type="button" id="refreshLobby" class="refresh" onclick="socket.emit('updateRooms');" value="⭯ Refresh">
+				<input type="button" id="refreshLobby" class="refresh" onclick="socket.emit('updateRooms');snd_chat.play();" value="⭯ Refresh">
 				<div class="playersOnline" id="playersOnline">
 				</div>
 			</div>

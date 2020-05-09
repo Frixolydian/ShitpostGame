@@ -12,10 +12,12 @@ function getQueryVariable(variable) {
 
 function createRoom(){
 	socket.emit('newRoom', {id: sessionStorage.getItem('socketId'), username: sessionStorage.getItem('username'), private: document.getElementById('privateRoom').checked ? true : false});
+	snd_fwd.play();
 }
 
 function joinRoom(chosenRoom){
 	socket.emit('joinRoom', {id: sessionStorage.getItem('socketId'), username: sessionStorage.getItem('username'), room:chosenRoom})
+	snd_fwd.play();
 }
 
 
@@ -24,6 +26,7 @@ socket.on('noRoom', function(){
 	document.getElementById('lobby').hidden = false;
 	document.getElementById('game').hidden = true;
 	socket.emit('updateRooms');
+	snd_back.play();
 })
 
 socket.on('roomFull', function(){
@@ -31,6 +34,7 @@ socket.on('roomFull', function(){
 	document.getElementById('lobby').hidden = false;
 	document.getElementById('game').hidden = true;
 	socket.emit('updateRooms');
+	snd_back.play();
 })
 
 
@@ -63,6 +67,7 @@ socket.on('getRoom', function(data){
 })
 
 socket.on('newPlayer', function(data){
+	snd_chat.play();
 	for (var i in data){
 		document.getElementById("player" + data[i].order).innerHTML = data[i].name + ': ' + data[i].score + "<hr>";
 		document.getElementById("player" + data[i].order).hidden = false;
@@ -71,16 +76,26 @@ socket.on('newPlayer', function(data){
 
 socket.on('updateScores', function(data){
 	for (var i in data){
+		if (data[i].id == socketId){
+			if (data[i].score - currentScore == 1){
+				snd_point.play();
+			}
+			else if (data[i].score - currentScore > 1){
+				snd_multipoint.play();
+			}
+			currentScore = data[i].score;
+		}
 		document.getElementById("player" + data[i].order).innerHTML = data[i].name + ': ' + data[i].score + "<hr>";
 		document.getElementById("player" + data[i].order).hidden = false;
 	}
 })
 
 socket.on('playerLeft', function(data){
+	snd_back.play();
 	for (var i = 0; i <= 9; i++){
 		document.getElementById('player' + i).innerHTML = '';
 		document.getElementById('player' + i).hidden = true;
-		document.getElementById('player' + i).style.color = '#ffffff'
+		document.getElementById('player' + i).style.color = '#ffffff';
 	}
 	for (var i in data.room){
 		document.getElementById('player' + data.room[i].order).innerHTML = data.room[i].name + ': ' + data.room[i].score + "<hr>";
@@ -92,6 +107,7 @@ socket.on('playerLeft', function(data){
 })
 
 function exitRoom(){
+	snd_back.play();
 	socket.emit('exitRoom');
 	socket.emit('updateRooms');
 	document.getElementById('lobby').hidden = false;

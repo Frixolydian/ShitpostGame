@@ -1,3 +1,3 @@
-cd C:\Users\mauri\Desktop\shitpostgame\src
+cd C:\Users\Mauricio\Documents\GitHub\shitpostgame\trunk
 
 node app.js

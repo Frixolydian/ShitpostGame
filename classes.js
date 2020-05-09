@@ -107,6 +107,7 @@ exports.Room = function(id, private){
 			self.gameMessage = 'Players drawing images';
 			self.chatlog.push("[GAME START]");
 			for (var i in self.players){
+				sockets[self.players[i].id].emit('startGame', {});
 				sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog});
 			}
 			//turn for order 0 player
@@ -133,6 +134,9 @@ exports.Room = function(id, private){
 				self.gameMessage = self.players[i].name + ' won!';
 				self.gamePhase = 'WINNER';
 				self.turnTimer = 30;
+				for (var i in self.players){
+					sockets[self.players[i].id].emit('winSound', {});
+				}
 			}
 		}
 	}
@@ -143,6 +147,7 @@ exports.Room = function(id, private){
 		self.gameMessage = 'Players drawing images';
 		self.chatlog.push("[GAME START]");
 		for (var i in self.players){
+			sockets[self.players[i].id].emit('startGame', {});
 			sockets[self.players[i].id].emit('updateChat', {chatlog: self.chatlog});
 		}
 		//turn for order 0 player
@@ -214,7 +219,7 @@ exports.Room = function(id, private){
 	self.update = function(sockets){
 		//update turntimer
 		for (var i in self.players){
-			sockets[self.players[i].id].emit('updateTurnTimer', {turnTimer: self.turnTimer, message: self.gameMessage}) //send turn timer
+			sockets[self.players[i].id].emit('updateTurnTimer', {turnTimer: self.turnTimer, message: self.gameMessage, phase: self.gamePhase}) //send turn timer
 		}
 		if (self.gameStart){
 			self.turnTimer -= 1;
@@ -225,6 +230,9 @@ exports.Room = function(id, private){
 						self.turnTimer = self.timers[1];
 						self.gamePhase = 'PLAY';
 						self.gameMessage = 'Make a meme! Pair an image and a template.';
+						for (var i in self.players){
+							sockets[self.players[i].id].emit('startGame', {});
+						}
 						break;
 					case 'PLAY':
 						self.play(sockets);

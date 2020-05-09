@@ -1,12 +1,35 @@
+var snd_alarm = new Audio('assets/sound/snd_alarm.ogg');
+var snd_alert = new Audio('assets/sound/snd_alert.ogg');
+var snd_back = new Audio('assets/sound/snd_back.ogg');
+var snd_chat = new Audio('assets/sound/snd_chat.ogg');
+var snd_fwd = new Audio('assets/sound/snd_fwd.ogg');
+var snd_multipoint = new Audio('assets/sound/snd_multipoint.ogg');
+var snd_point = new Audio('assets/sound/snd_point.ogg');
+var snd_random = new Audio('assets/sound/snd_random.ogg');
+var snd_win = new Audio('assets/sound/snd_win.ogg');
+
+
 var selectedCard = 0;
 var selectedTemplate = 0;
 var selectedVote = null;
 var vote = false;
 
+var currentScore = 0;
+
+socket.on('startGame', function(data){
+	snd_alert.play();
+})
+
+socket.on('winSound', function(data){
+	snd_win.play();
+})
 
 socket.on('updateTurnTimer', function(data){
 	document.getElementById('turnTimer').innerHTML = data.message;
 	document.getElementById('timer').innerHTML = 'Time: ' + Math.floor(data.turnTimer / 5);
+	if (data.turnTimer == 25 && data.phase == 'PLAY'){
+		snd_alarm.play();
+	}
 })
 
 socket.on('disconnectEndGame', function(){
@@ -33,6 +56,7 @@ socket.on('updateCards', function(data){
 })
 
 socket.on('everyoneVote', function(data){
+	snd_alert.play();
 	selectedVote = null;
 	vote = false;
 	document.getElementById('voteButton').style.backgroundColor = '#222741';
@@ -93,6 +117,7 @@ socket.on('results', function(data){
 
 function inputVote(meme){
 	if (vote == false){
+		snd_fwd.play();
 		for (var i = 0; i < 10; i++){
 			document.getElementById('memeContainer' + i).style.border = "solid 0.7px #979797";
 		}
@@ -103,6 +128,7 @@ function inputVote(meme){
 }
 
 function inputCard(card){
+	snd_fwd.play();
 	socket.emit('inputCard', {id: sessionStorage.getItem('socketId'), card: card})
 	selectedCard = card;
 	for (var i = 0; i < 5; i++){
@@ -113,6 +139,7 @@ function inputCard(card){
 }
 
 function inputTemplate(template){
+	snd_fwd.play();
 	socket.emit('inputTemplate', {id: sessionStorage.getItem('socketId'), template: template})
 	selectedTemplate = template;
 	for (var i = 0; i < 3; i++){
@@ -122,11 +149,13 @@ function inputTemplate(template){
 }
 
 function reRoll(){
+	snd_random.play();
 	socket.emit('reRoll', {id: sessionStorage.getItem('socketId')});
 }
 
 function voteButton(){
 	if (selectedVote != null && vote == false){
+		snd_fwd.play();
 		document.getElementById('voteButton').style.backgroundColor = '#c2c5d4';
 		document.getElementById('voteButton').style.color = '#222741';
 		vote = true;
